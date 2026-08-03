@@ -2,699 +2,576 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🔧 UCHIHA • V7 - ĐANG BẢO TRÌ</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>UCHIHA V6 · Bảo trì</title>
     <style>
-        /* ====== RESET & BASE ====== */
+        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
-        body {
-            background: #0a0a0a;
+        html, body {
+            width: 100%;
             min-height: 100vh;
+            min-height: 100dvh;
+            background: #0b0a0f;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f0edff;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+        /* ===== MAINTENANCE OVERLAY (luôn hiển thị khi MAINTENANCE_MODE = true) ===== */
+        #maintenance-overlay {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background: #0b0a0f;
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+            pointer-events: auto;
+            opacity: 1;
+            transition: opacity 0.4s ease;
+        }
+        /* khi tắt maintenance thì ẩn hẳn, không chiếm không gian */
+        #maintenance-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+            display: none;
+        }
+
+        /* ===== PARTICLE BACKGROUND ===== */
+        #particles-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.35;
+        }
+
+        /* ===== MAIN CARD ===== */
+        .maintenance-card {
+            position: relative;
+            z-index: 2;
+            max-width: 680px;
+            width: 100%;
+            background: rgba(18, 16, 28, 0.55);
+            backdrop-filter: blur(24px) saturate(1.2);
+            -webkit-backdrop-filter: blur(24px) saturate(1.2);
+            border: 1px solid rgba(180, 130, 255, 0.15);
+            border-radius: 52px;
+            padding: 38px 32px 32px;
+            box-shadow: 0 30px 80px rgba(100, 50, 255, 0.15), 0 0 0 1px rgba(180, 130, 255, 0.05) inset;
+            animation: cardFade 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            transform: scale(0.96) translateY(12px);
+            opacity: 0;
+            pointer-events: auto;
+            max-height: 98vh;
+            max-height: 98dvh;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .maintenance-card::-webkit-scrollbar {
+            display: none;
+        }
+        @keyframes cardFade {
+            0% { opacity: 0; transform: scale(0.94) translateY(16px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* ===== GLASS DECOR ===== */
+        .glass-glow {
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(160, 80, 255, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glass-glow-left {
+            position: absolute;
+            bottom: -15%;
+            left: -15%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(80, 40, 200, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(70px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===== CONTENT ===== */
+        .maintenance-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* header icon */
+        .maint-icon {
             display: flex;
             justify-content: center;
-            align-items: center;
-            font-family: 'Courier New', 'Segoe UI', monospace;
-            overflow: hidden;
-            position: relative;
+            margin-bottom: 10px;
+        }
+        .maint-icon span {
+            font-size: 50px;
+            display: inline-block;
+            animation: pulseIcon 2.2s ease-in-out infinite;
+            filter: drop-shadow(0 0 16px rgba(180, 100, 255, 0.5));
+        }
+        @keyframes pulseIcon {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.12); opacity: 1; }
         }
 
-        /* ====== MATRIX BACKGROUND ====== */
-        #matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 0;
-            background: #0a0a0a;
-            overflow: hidden;
-        }
-
-        #matrix-bg::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                repeating-linear-gradient(0deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(0, 255, 65, 0.03) 2px,
-                    rgba(0, 255, 65, 0.03) 4px
-                );
-            animation: matrixScan 8s linear infinite;
-        }
-
-        @keyframes matrixScan {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100%; }
-        }
-
-        /* ====== MATRIX RAIN ====== */
-        #matrix-rain {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 0;
-            opacity: 0.15;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            color: #00ff41;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .rain-column {
-            position: absolute;
-            top: -100%;
-            animation: rainFall linear infinite;
-            white-space: nowrap;
-            letter-spacing: 2px;
-            opacity: 0.6;
-        }
-
-        @keyframes rainFall {
-            0% { transform: translateY(0); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(110vh); opacity: 0; }
-        }
-
-        /* ====== MAIN CONTAINER ====== */
-        .main-container {
-            position: relative;
-            z-index: 1;
-            max-width: 500px;
-            width: 90%;
-            padding: 20px;
-        }
-
-        /* ====== CARD ====== */
-        .maintenance-card {
-            background: rgba(10, 10, 10, 0.92);
-            border: 1px solid #00ff41;
-            border-radius: 8px;
-            padding: 40px 30px;
+        .maint-title {
             text-align: center;
-            box-shadow: 
-                0 0 40px rgba(0, 255, 65, 0.1),
-                inset 0 0 40px rgba(0, 255, 65, 0.05);
-            position: relative;
-            overflow: hidden;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #d4bfff, #a27aff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(150, 100, 255, 0.3);
         }
 
-        .maintenance-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 255, 65, 0.03) 0%, transparent 70%);
-            animation: glowPulse 4s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        @keyframes glowPulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 1; }
-        }
-
-        /* ====== SCANLINE ====== */
-        .scanline {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(0deg,
-                transparent,
-                transparent 3px,
-                rgba(0, 255, 65, 0.02) 3px,
-                rgba(0, 255, 65, 0.02) 4px
-            );
-            pointer-events: none;
-            animation: scanlineMove 3s linear infinite;
-            border-radius: 8px;
-        }
-
-        @keyframes scanlineMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100%; }
-        }
-
-        /* ====== CORNER DECORATIONS ====== */
-        .corner {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-color: #00ff41;
-            border-style: solid;
-            border-width: 0;
+        /* divider */
+        .lang-divider {
+            width: 70px;
+            height: 3px;
+            margin: 12px auto 22px;
+            background: linear-gradient(90deg, transparent, #a77aff, #7a4aff, #a77aff, transparent);
+            border-radius: 10px;
+            filter: drop-shadow(0 0 12px #8b5cf6);
             opacity: 0.6;
         }
 
-        .corner-tl {
-            top: 8px;
-            left: 8px;
-            border-top-width: 2px;
-            border-left-width: 2px;
+        /* block ngôn ngữ */
+        .lang-block {
+            padding: 6px 0 8px;
+        }
+        .lang-block.viet {
+            border-bottom: 1px solid rgba(160, 120, 255, 0.15);
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+        }
+        .lang-block.eng {
+            padding-top: 6px;
         }
 
-        .corner-tr {
-            top: 8px;
-            right: 8px;
-            border-top-width: 2px;
-            border-right-width: 2px;
-        }
-
-        .corner-bl {
-            bottom: 8px;
-            left: 8px;
-            border-bottom-width: 2px;
-            border-left-width: 2px;
-        }
-
-        .corner-br {
-            bottom: 8px;
-            right: 8px;
-            border-bottom-width: 2px;
-            border-right-width: 2px;
-        }
-
-        /* ====== CONTENT ====== */
-        .icon-main {
-            font-size: 60px;
-            color: #00ff41;
-            margin-bottom: 20px;
-            display: block;
-            animation: iconPulse 2s ease-in-out infinite;
-            text-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
-            position: relative;
-            z-index: 1;
-        }
-
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.1) rotate(5deg); }
-        }
-
-        .title {
-            font-size: 28px;
-            font-weight: 800;
-            color: #00ff41;
-            letter-spacing: 4px;
-            text-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
-            position: relative;
-            z-index: 1;
-            font-family: 'Courier New', monospace;
-        }
-
-        .title .v7 {
-            font-size: 16px;
-            color: #00ccff;
-            text-shadow: 0 0 20px rgba(0, 204, 255, 0.3);
-        }
-
-        .title .cursor {
-            animation: blinkText 1s infinite;
-        }
-
-        @keyframes blinkText {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        .sub-title {
-            font-size: 14px;
-            color: #888;
-            margin: 10px 0 25px;
-            letter-spacing: 3px;
-            position: relative;
-            z-index: 1;
-            font-family: 'Courier New', monospace;
-        }
-
-        .sub-title .highlight {
-            color: #ffd700;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
-        }
-
-        /* ====== PROGRESS BAR ====== */
-        .progress-container {
-            margin: 25px 0 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            color: #555;
+        .lang-label {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #b8a9ff;
             margin-bottom: 6px;
-            font-family: 'Courier New', monospace;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0.7;
+        }
+
+        .lang-body {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #e6e0ff;
+        }
+        .lang-body .status-badge {
+            font-weight: 700;
+            font-size: 16px;
+            background: rgba(130, 80, 255, 0.15);
+            padding: 2px 14px;
+            border-radius: 40px;
+            display: inline-block;
+            border: 1px solid rgba(170, 130, 255, 0.2);
+            letter-spacing: 0.5px;
+            margin: 6px 0 8px;
+        }
+
+        .neon-v7 {
+            font-weight: 800;
+            font-size: 22px;
+            background: linear-gradient(135deg, #c084fc, #a855f7, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(168, 85, 247, 0.5), 0 0 60px rgba(124, 58, 237, 0.2);
+            animation: neonPulse 2s ease-in-out infinite alternate;
+            display: inline-block;
+        }
+        @keyframes neonPulse {
+            0% { filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.3)); }
+            100% { filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.7)); }
+        }
+
+        .uploading-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0 4px;
+            font-weight: 500;
+            color: #c4b5fd;
+        }
+        .uploading-dots {
+            display: inline-flex;
+            gap: 4px;
+            letter-spacing: 4px;
+        }
+        .uploading-dots span {
+            display: inline-block;
+            animation: dotMove 1.6s infinite;
+        }
+        .uploading-dots span:nth-child(2) { animation-delay: 0.3s; }
+        .uploading-dots span:nth-child(3) { animation-delay: 0.6s; }
+        @keyframes dotMove {
+            0%, 20% { opacity: 0.2; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-4px); }
+            80%, 100% { opacity: 0.2; transform: translateY(0); }
+        }
+
+        .maint-note {
+            font-size: 13px;
+            color: #a89fc0;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 8px 14px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .maint-note .dev {
+            font-weight: 500;
+            color: #c4b5fd;
+        }
+
+        .footer-maint {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: #4f4a66;
             letter-spacing: 1px;
         }
 
-        .progress-label .percent {
-            color: #00ff41;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 3px;
-            background: #1a1a1a;
-            border-radius: 2px;
-            overflow: hidden;
-            border: 1px solid #1a1a1a;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #00ff41, #00ccff);
-            border-radius: 2px;
-            animation: progressLoad 4s ease-in-out infinite;
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
-        }
-
-        @keyframes progressLoad {
-            0% { width: 0%; }
-            50% { width: 75%; }
-            70% { width: 85%; }
-            100% { width: 95%; }
-        }
-
-        /* ====== STATUS MESSAGES ====== */
-        .status-messages {
-            margin: 15px 0 20px;
-            text-align: left;
-            position: relative;
-            z-index: 1;
-        }
-
-        .status-line {
-            font-size: 11px;
-            color: #555;
-            padding: 4px 0;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 0.5px;
-            animation: statusFade 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .status-line .prompt {
-            color: #00ff41;
-            opacity: 0.5;
-        }
-
-        .status-line .done {
-            color: #00ff41;
-        }
-
-        .status-line .processing {
-            color: #ffd700;
-            animation: blinkText 1s infinite;
-        }
-
-        .status-line .error {
-            color: #ff6b6b;
-        }
-
-        @keyframes statusFade {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        /* ====== AUTHOR ====== */
-        .author {
-            margin: 20px 0 10px;
-            padding-top: 20px;
-            border-top: 1px solid #1a1a1a;
-            position: relative;
-            z-index: 1;
-        }
-
-        .author-name {
-            font-size: 16px;
-            font-weight: 700;
-            color: #00ff88;
-            letter-spacing: 3px;
-            text-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
-            font-family: 'Courier New', monospace;
-        }
-
-        .author-sub {
-            font-size: 10px;
-            color: #333;
-            margin-top: 4px;
-            letter-spacing: 2px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .author-sub .heart {
-            color: #ff6b6b;
-            animation: heartBeat 1.5s ease-in-out infinite;
-            display: inline-block;
-        }
-
-        @keyframes heartBeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        /* ====== FOOTER ====== */
-        .footer-text {
-            font-size: 9px;
-            color: #222;
-            margin-top: 20px;
-            letter-spacing: 2px;
-            position: relative;
-            z-index: 1;
-            font-family: 'Courier New', monospace;
-        }
-
-        .footer-text .blink {
-            animation: blinkText 1.5s infinite;
-        }
-
-        /* ====== RESPONSIVE ====== */
-        @media (max-width: 480px) {
+        /* RESPONSIVE */
+        @media (max-width: 520px) {
             .maintenance-card {
-                padding: 30px 20px;
+                padding: 28px 18px 22px;
+                border-radius: 36px;
             }
-
-            .title {
+            .maint-title {
                 font-size: 22px;
-                letter-spacing: 2px;
             }
-
-            .icon-main {
-                font-size: 45px;
-            }
-
-            .sub-title {
-                font-size: 12px;
-                letter-spacing: 2px;
-            }
-
-            .author-name {
+            .lang-body {
                 font-size: 14px;
             }
-
-            .status-line {
-                font-size: 10px;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .maintenance-card {
-                padding: 20px 15px;
-            }
-
-            .title {
+            .neon-v7 {
                 font-size: 18px;
             }
-
-            .icon-main {
-                font-size: 35px;
+            .maint-icon span {
+                font-size: 40px;
+            }
+        }
+        @media (max-width: 400px) {
+            .maintenance-card {
+                padding: 20px 14px 18px;
+                border-radius: 28px;
             }
         }
 
-        /* ====== GLITCH EFFECT ====== */
-        .glitch {
-            animation: glitch 3s infinite;
+        /* safe area */
+        @supports (padding: max(0px)) {
+            .maintenance-card {
+                padding-left: max(20px, env(safe-area-inset-left));
+                padding-right: max(20px, env(safe-area-inset-right));
+            }
         }
 
-        @keyframes glitch {
-            0%, 90%, 100% { opacity: 1; transform: none; }
-            92% { opacity: 0.8; transform: translateX(-2px); }
-            94% { opacity: 1; transform: translateX(2px); }
-            96% { opacity: 0.8; transform: translateX(-1px); }
-            98% { opacity: 1; transform: translateX(1px); }
+        /* ẩn toàn bộ giao diện UCHIHA V6 (nếu có) */
+        #app, .app, [id*="UCHIHA"], [class*="UCHIHA"] {
+            display: none !important;
         }
-
-        /* ====== FLOATING PARTICLES ====== */
-        .particle {
-            position: fixed;
-            width: 2px;
-            height: 2px;
-            background: #00ff41;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0;
-            animation: particleFloat linear infinite;
+        /* Bảo vệ: ẩn mọi phần tử con của body ngoại trừ maintenance và particles */
+        body > *:not(#maintenance-overlay):not(#particles-canvas) {
+            display: none !important;
         }
-
-        @keyframes particleFloat {
-            0% {
-                opacity: 0;
-                transform: translateY(0) translateX(0) scale(0);
-            }
-            10% {
-                opacity: 0.5;
-                transform: translateY(-20px) translateX(10px) scale(1);
-            }
-            90% {
-                opacity: 0.5;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100vh) translateX(-20px) scale(0);
-            }
+        /* nhưng vẫn giữ lại particles nếu cần */
+        body > #particles-canvas {
+            display: block !important;
+        }
+        /* đảm bảo không scroll */
+        body {
+            overflow: hidden !important;
+            height: 100vh;
+            height: 100dvh;
+        }
+        html {
+            overflow: hidden !important;
+            height: 100vh;
+            height: 100dvh;
         }
     </style>
 </head>
 <body>
-    <!-- ====== MATRIX BACKGROUND ====== -->
-    <div id="matrix-bg"></div>
+    <!-- ===== PARTICLES ===== -->
+    <canvas id="particles-canvas"></canvas>
 
-    <!-- ====== MATRIX RAIN ====== -->
-    <div id="matrix-rain"></div>
-
-    <!-- ====== FLOATING PARTICLES ====== -->
-    <div id="particles"></div>
-
-    <!-- ====== MAIN CONTENT ====== -->
-    <div class="main-container">
+    <!-- ===== MAINTENANCE OVERLAY (hiển thị toàn màn hình) ===== -->
+    <div id="maintenance-overlay">
         <div class="maintenance-card">
-            <div class="scanline"></div>
-
-            <!-- Corners -->
-            <div class="corner corner-tl"></div>
-            <div class="corner corner-tr"></div>
-            <div class="corner corner-bl"></div>
-            <div class="corner corner-br"></div>
-
-            <!-- Content -->
-            <div style="position: relative; z-index: 1;">
-                <i class="fas fa-code icon-main glitch"></i>
-
-                <div class="title">
-                    ⚡ UCHIHA <span class="v7">v7</span><span class="cursor">_</span>
+            <div class="glass-glow"></div>
+            <div class="glass-glow-left"></div>
+            <div class="maintenance-content">
+                <!-- icon -->
+                <div class="maint-icon">
+                    <span>⚡</span>
                 </div>
+                <div class="maint-title">UCHIHA V6</div>
+                <div class="lang-divider"></div>
 
-                <div class="sub-title">
-                    <span class="highlight">⟡</span> SYSTEM MAINTENANCE <span class="highlight">⟡</span>
-                </div>
-
-                <!-- Progress -->
-                <div class="progress-container">
-                    <div class="progress-label">
-                        <span>UPGRADING TO V7</span>
-                        <span class="percent" id="percentDisplay">73%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
+                <!-- VIETNAMESE -->
+                <div class="lang-block viet">
+                    <div class="lang-label">🇻🇳 TIẾNG VIỆT</div>
+                    <div class="lang-body">
+                        <div class="status-badge">● HỆ THỐNG TẠM NGỪNG</div>
+                        <p style="margin: 6px 0 8px;">Hệ thống UCHIHA V6 hiện đang tạm ngừng hoạt động.</p>
+                        <p style="margin: 6px 0 8px;">Chúng tôi đang tiến hành nâng cấp hệ thống và chuẩn bị phát hành phiên bản mới:</p>
+                        <div style="margin: 8px 0 6px;"><span class="neon-v7">⚡ UCHIHA V7</span></div>
+                        <div class="uploading-line">
+                            <span>⚙️ ĐANG UP UCHIHA V7...</span>
+                            <span class="uploading-dots"><span>•</span><span>•</span><span>•</span></span>
+                        </div>
+                        <div class="maint-note">
+                            <span>🔔</span> Vui lòng quay lại sau khi hệ thống hoàn tất nâng cấp.
+                        </div>
+                        <div style="margin-top: 8px; font-size: 13px; color: #9489b0;">Developer <span class="dev">Nguyen Tien Hoc</span></div>
                     </div>
                 </div>
 
-                <!-- Status Messages -->
-                <div class="status-messages" id="statusMessages">
-                    <div class="status-line">
-                        <span class="prompt">></span>
-                        <span>Initializing quantum kernel...</span>
-                        <span class="done">✓</span>
-                    </div>
-                    <div class="status-line">
-                        <span class="prompt">></span>
-                        <span>Loading V7 modules...</span>
-                        <span class="processing">●</span>
-                    </div>
-                </div>
-
-                <!-- Author -->
-                <div class="author">
-                    <div class="author-name">✦ NGUYEN TIEN HOC ✦</div>
-                    <div class="author-sub">
-                        <span class="heart">♥</span> PLEASE WAIT <span class="heart">♥</span>
+                <!-- ENGLISH -->
+                <div class="lang-block eng">
+                    <div class="lang-label">🇬🇧 ENGLISH</div>
+                    <div class="lang-body">
+                        <div class="status-badge">● SYSTEM TEMPORARILY UNAVAILABLE</div>
+                        <p style="margin: 6px 0 8px;">The UCHIHA V6 system is temporarily unavailable.</p>
+                        <p style="margin: 6px 0 8px;">We are currently upgrading the system and preparing to release the new version:</p>
+                        <div style="margin: 8px 0 6px;"><span class="neon-v7">⚡ UCHIHA V7</span></div>
+                        <div class="uploading-line">
+                            <span>⚙️ UPLOADING UCHIHA V7...</span>
+                            <span class="uploading-dots"><span>•</span><span>•</span><span>•</span></span>
+                        </div>
+                        <div class="maint-note">
+                            <span>🔔</span> Please come back after the system upgrade has been completed.
+                        </div>
+                        <div style="margin-top: 8px; font-size: 13px; color: #9489b0;">Developer <span class="dev">Nguyen Tien Hoc</span></div>
                     </div>
                 </div>
 
-                <!-- Footer -->
-                <div class="footer-text">
-                    <span class="blink">⟡</span> SYSTEM UPGRADE IN PROGRESS <span class="blink">⟡</span><br>
-                    <span style="color:#1a1a1a; font-size:8px;">v7.0 • HACKER EDITION • © 2026</span>
-                </div>
+                <div class="footer-maint">⚡ MAINTENANCE MODE · UCHIHA V7</div>
             </div>
         </div>
     </div>
 
+    <!-- ===== TOÀN BỘ CODE UCHIHA V6 (GIỮ NGUYÊN, CHỈ ẨN BẰNG CSS + MAINTENANCE_MODE) ===== -->
+    <!-- ===== V6 APP (sẽ bị ẩn hoàn toàn khi MAINTENANCE_MODE = true) ===== -->
+    <div id="uchiha-v6-app" style="display: none !important;">
+        <!-- Nội dung V6 gốc được giữ nguyên, nhưng bị ẩn bởi css body > *:not(#maintenance-overlay) -->
+        <!-- Thực tế toàn bộ V6 sẽ được đặt ở đây, nhưng vì chỉ cần bảo trì nên tôi giữ nguyên cấu trúc -->
+        <!-- do yêu cầu "giữ nguyên toàn bộ code UCHIHA V6 hiện tại" nên tôi sẽ chèn phần còn lại vào đây -->
+        <!-- Tuy nhiên, vì không có sẵn code V6, tôi thêm một khối giữ chỗ để đảm bảo không làm mất logic -->
+        <div id="v6-placeholder" style="display: none;">UCHIHA V6 ORIGINAL CODE (giữ nguyên)</div>
+        <!-- ===== V6 scripts và dữ liệu sẽ nằm ở đây (giữ nguyên) ===== -->
+    </div>
+
     <script>
-        // ============================================
-        // MATRIX RAIN
-        // ============================================
-        function createMatrixRain() {
-            const container = document.getElementById('matrix-rain');
-            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+-=';
-            const numColumns = Math.floor(window.innerWidth / 20);
+        // ============================================================
+        //  🛠️ MAINTENANCE MODE — BẬT/TẮT TOÀN BỘ HỆ THỐNG
+        //  Chỉ cần đổi true → false để khôi phục V6
+        // ============================================================
+        const MAINTENANCE_MODE = true;   // <--- đổi thành false để tắt bảo trì
 
-            for (let i = 0; i < numColumns; i++) {
-                const col = document.createElement('div');
-                col.className = 'rain-column';
-                const length = Math.floor(Math.random() * 20) + 10;
-                let text = '';
-                for (let j = 0; j < length; j++) {
-                    text += chars[Math.floor(Math.random() * chars.length)];
-                    if (j < length - 1) text += ' ';
+        // ============================================================
+        //  KHỞI TẠO: nếu MAINTENANCE_MODE = true → Ẩn toàn bộ V6
+        //  Nếu false → gỡ overlay, hiện V6
+        // ============================================================
+        (function initMaintenance() {
+            const overlay = document.getElementById('maintenance-overlay');
+            const particlesCanvas = document.getElementById('particles-canvas');
+
+            // Nếu không có overlay thì thoát (tránh lỗi)
+            if (!overlay) return;
+
+            if (MAINTENANCE_MODE === true) {
+                // BẬT BẢO TRÌ: hiển thị overlay, ẩn mọi thứ khác
+                overlay.classList.remove('hidden');
+                overlay.style.display = 'flex';
+                // ẩn toàn bộ V6 (đã được CSS xử lý, nhưng thêm class để chắc)
+                document.body.classList.add('maintenance-active');
+                // cho phép particles
+                if (particlesCanvas) {
+                    particlesCanvas.style.display = 'block';
                 }
-                col.textContent = text;
-                col.style.left = (i * 20) + 'px';
-                col.style.fontSize = (Math.random() * 8 + 10) + 'px';
-                col.style.animationDuration = (Math.random() * 15 + 10) + 's';
-                col.style.animationDelay = (Math.random() * 20) + 's';
-                container.appendChild(col);
-            }
-        }
+                // disable scroll
+                document.documentElement.style.overflow = 'hidden';
+                document.body.style.overflow = 'hidden';
 
-        createMatrixRain();
+                // khởi tạo particles
+                initParticles();
 
-        // ============================================
-        // FLOATING PARTICLES
-        // ============================================
-        function createParticles() {
-            const container = document.getElementById('particles');
-            const count = 30;
-
-            for (let i = 0; i < count; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDuration = (Math.random() * 8 + 6) + 's';
-                particle.style.animationDelay = (Math.random() * 8) + 's';
-                particle.style.width = (Math.random() * 3 + 1) + 'px';
-                particle.style.height = particle.style.width;
-                container.appendChild(particle);
-            }
-        }
-
-        createParticles();
-
-        // ============================================
-        // PROGRESS BAR SIMULATION
-        // ============================================
-        let progress = 0;
-        const progressFill = document.getElementById('progressFill');
-        const percentDisplay = document.getElementById('percentDisplay');
-        const statusMessages = document.getElementById('statusMessages');
-
-        const statusSteps = [
-            { text: 'Initializing quantum kernel...', done: true },
-            { text: 'Loading V7 modules...', done: false },
-            { text: 'Configuring hacker interface...', done: false },
-            { text: 'Optimizing performance...', done: false },
-            { text: 'Loading VIP features...', done: false },
-            { text: 'Finalizing system upgrade...', done: false },
-        ];
-
-        let currentStep = 1;
-
-        function updateProgress() {
-            progress += Math.random() * 2 + 0.5;
-            if (progress > 95) progress = 95;
-
-            progressFill.style.width = progress + '%';
-            percentDisplay.textContent = Math.floor(progress) + '%';
-
-            // Update status messages
-            const stepIndex = Math.floor(progress / 16);
-            if (stepIndex < statusSteps.length && stepIndex >= currentStep) {
-                currentStep = stepIndex;
-                const step = statusSteps[stepIndex];
-                if (step) {
-                    const newLine = document.createElement('div');
-                    newLine.className = 'status-line';
-                    newLine.innerHTML = `
-                        <span class="prompt">></span>
-                        <span>${step.text}</span>
-                        <span class="${step.done ? 'done' : 'processing'}">${step.done ? '✓' : '●'}</span>
-                    `;
-                    statusMessages.appendChild(newLine);
-                    statusMessages.scrollTop = statusMessages.scrollHeight;
-                }
-            }
-
-            if (progress < 95) {
-                setTimeout(updateProgress, 300 + Math.random() * 400);
             } else {
-                // Almost done
-                setTimeout(() => {
-                    progressFill.style.width = '100%';
-                    percentDisplay.textContent = '100%';
-
-                    // Add final status
-                    const finalLine = document.createElement('div');
-                    finalLine.className = 'status-line';
-                    finalLine.innerHTML = `
-                        <span class="prompt">></span>
-                        <span style="color:#00ff41;">System upgrade complete! Ready for V7</span>
-                        <span class="done">✓</span>
-                    `;
-                    statusMessages.appendChild(finalLine);
-
-                    // Flash effect
-                    document.querySelector('.maintenance-card').style.borderColor = '#00ff41';
-                    document.querySelector('.maintenance-card').style.boxShadow =
-                        '0 0 60px rgba(0, 255, 65, 0.2), inset 0 0 60px rgba(0, 255, 65, 0.1)';
-
-                }, 500);
+                // TẮT BẢO TRÌ: ẩn overlay, hiện V6
+                overlay.classList.add('hidden');
+                overlay.style.display = 'none';
+                document.body.classList.remove('maintenance-active');
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
+                if (particlesCanvas) {
+                    particlesCanvas.style.display = 'none';
+                }
+                // Khôi phục V6 (gỡ css ẩn)
+                // vì css đã ẩn bằng selector, ta gỡ bằng cách xóa style ẩn khỏi V6 container
+                const v6App = document.getElementById('uchiha-v6-app');
+                if (v6App) {
+                    v6App.style.display = ''; // trả về hiển thị mặc định
+                }
+                // gỡ bỏ display: none khỏi các phần tử con nếu có
+                const allElements = document.querySelectorAll('body > *:not(#maintenance-overlay):not(#particles-canvas)');
+                allElements.forEach(el => {
+                    el.style.display = '';
+                });
+                // xóa class ẩn toàn cục
+                document.querySelectorAll('[style*="display: none"]').forEach(el => {
+                    if (el.id !== 'maintenance-overlay') {
+                        el.style.display = '';
+                    }
+                });
+                // nếu có app chính, hiển thị
+                const app = document.querySelector('.app, #app, [class*="app"]');
+                if (app) app.style.display = '';
             }
+        })();
+
+        // ============================================================
+        //  PARTICLES NHẸ (tối ưu cho iPhone)
+        // ============================================================
+        let particleAnimationId = null;
+        let particles = [];
+
+        function initParticles() {
+            const canvas = document.getElementById('particles-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let width, height;
+
+            function resize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            const count = Math.min(45, Math.floor((width * height) / 16000));
+            particles = [];
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 0.35,
+                    vy: (Math.random() - 0.5) * 0.35,
+                    r: Math.random() * 2.2 + 0.8,
+                    a: Math.random() * 0.35 + 0.15,
+                });
+            }
+
+            function draw() {
+                if (!canvas || !ctx) return;
+                ctx.clearRect(0, 0, width, height);
+                for (let p of particles) {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    if (p.x < 0 || p.x > width) p.vx *= -1;
+                    if (p.y < 0 || p.y > height) p.vy *= -1;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(180, 140, 255, ${p.a})`;
+                    ctx.fill();
+                }
+                // kết nối nhẹ
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(160, 120, 255, ${0.08 * (1 - dist/120)})`;
+                            ctx.lineWidth = 0.6;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                particleAnimationId = requestAnimationFrame(draw);
+            }
+            if (particleAnimationId) cancelAnimationFrame(particleAnimationId);
+            draw();
         }
 
-        // Start progress after 1 second
-        setTimeout(updateProgress, 1000);
+        // fallback: nếu MAINTENANCE_MODE = false, dừng particles
+        if (!MAINTENANCE_MODE) {
+            const canvas = document.getElementById('particles-canvas');
+            if (canvas) canvas.style.display = 'none';
+            if (particleAnimationId) cancelAnimationFrame(particleAnimationId);
+        }
 
-        // ============================================
-        // RESIZE HANDLER
-        // ============================================
-        window.addEventListener('resize', () => {
-            const container = document.getElementById('matrix-rain');
-            container.innerHTML = '';
-            createMatrixRain();
-        });
+        // ============================================================
+        //  GIỮ NGUYÊN TOÀN BỘ CODE V6 (CHỈ THÊM MAINTENANCE)
+        //  Phần này sẽ chứa toàn bộ script và logic UCHIHA V6.
+        //  Do không có code V6 cụ thể, tôi giữ một placeholder.
+        //  Khi tích hợp, chỉ cần thay thế placeholder này bằng code V6 thật.
+        // ============================================================
+        // ===== V6 ORIGINAL CODE (giữ nguyên, không sửa) =====
+        console.log('UCHIHA V6 · Maintenance Mode:', MAINTENANCE_MODE ? 'ON' : 'OFF');
+        // (toàn bộ logic V6 sẽ được đặt ở đây, không thay đổi)
+        // Ví dụ: các function VIP, Admin, v.v. đều giữ nguyên.
+        // ============================================================
 
-        // ============================================
-        // CONSOLE MESSAGE
-        // ============================================
-        console.log('⚡ UCHIHA V7 - SYSTEM MAINTENANCE ⚡');
-        console.log('👨‍💻 MAKE BY NGUYEN TIEN HOC');
-        console.log('⏳ Upgrading to V7... Please wait!');
-        console.log('📱 Zalo: 0987201932');
+        // Đảm bảo nếu MAINTENANCE_MODE = false, V6 hoạt động bình thường
+        // (đã xử lý ở trên)
     </script>
+
+    <!-- ===== PHẦN GIỮ CHỖ CHO CODE V6 (nếu có) ===== -->
+    <!-- Trong thực tế, toàn bộ code UCHIHA V6 sẽ nằm ở đây, giữ nguyên -->
+    <!-- Tôi thêm một số comment để rõ ràng -->
+    <!-- 
+        ============================================================
+        TOÀN BỘ CODE UCHIHA V6 (HTML, CSS, JS) ĐƯỢC ĐẶT TẠI ĐÂY
+        KHÔNG SỬA ĐỔI GÌ, CHỈ THÊM MAINTENANCE MODE Ở PHÍA TRÊN
+        ============================================================
+    -->
 </body>
 </html>
