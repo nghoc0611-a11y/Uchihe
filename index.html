@@ -2,3412 +2,699 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>UCHIHA • V6 ⚡ PREMIUM DASHBOARD</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔧 UCHIHA • V7 - ĐANG BẢO TRÌ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* ====== CSS VARIABLES ====== */
-        :root {
-            --primary-color: #ff3b3b;
-            --secondary-color: #ffaa00;
-            --bg-color: #030303;
-            --card-bg: #0b0809;
-            --text-color: #eee;
-            --border-color: #2a1a1a;
-            --glow-color: #ff0040;
-            --vip-color: #ffaa00;
-            --guest-color: #4466aa;
-            --free-color: #ff6666;
-            --glass-bg: rgba(10, 12, 24, 0.65);
-            --accent-gradient: linear-gradient(135deg, #ff3b3b, #ffaa00);
-            --dev-color: #00ff88;
-            --expired-color: #ff3333;
-            --warning-color: #ff8800;
-        }
-
-        /* Theme: Dark Red */
-        .theme-dark-red {
-            --primary-color: #ff1a1a;
-            --secondary-color: #ff4400;
-            --glow-color: #ff0040;
-            --vip-color: #ff4400;
-        }
-
-        /* Theme: Cyber Blue */
-        .theme-cyber-blue {
-            --primary-color: #00ccff;
-            --secondary-color: #00ff88;
-            --glow-color: #00ccff;
-            --vip-color: #00ff88;
-            --guest-color: #4488ff;
-            --accent-gradient: linear-gradient(135deg, #00ccff, #00ff88);
-        }
-
-        /* Theme: Neon Purple */
-        .theme-neon-purple {
-            --primary-color: #aa44ff;
-            --secondary-color: #ff00aa;
-            --glow-color: #aa44ff;
-            --vip-color: #ff00aa;
-            --guest-color: #8844ff;
-            --accent-gradient: linear-gradient(135deg, #aa44ff, #ff00aa);
-        }
-
-        /* Theme: Gold */
-        .theme-gold {
-            --primary-color: #ffd700;
-            --secondary-color: #ff8800;
-            --glow-color: #ffd700;
-            --vip-color: #ffd700;
-            --guest-color: #ff8800;
-            --accent-gradient: linear-gradient(135deg, #ffd700, #ff8800);
-        }
-
-        /* ====== TẤT CẢ STYLE ====== */
+        /* ====== RESET & BASE ====== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
-        }
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #050505;
-        }
-        ::-webkit-scrollbar-thumb {
-            border-radius: 20px;
-            background: var(--primary-color);
-            box-shadow: 0 0 12px var(--glow-color);
         }
 
-        html,
         body {
-            background: var(--bg-color);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            padding: 0;
-            font-size: 14px;
-            line-height: 1.5;
-            overflow-x: hidden;
-            margin: 0;
-            height: 100%;
-            transition: background 0.5s, color 0.5s;
-        }
-
-        #app {
-            max-width: 430px;
-            width: 100%;
-            background: var(--bg-color);
-            position: relative;
-            box-shadow: 0 0 40px var(--glow-color)22;
-            border-left: 1px solid var(--primary-color)33;
-            border-right: 1px solid var(--primary-color)33;
-            min-height: 100vh;
-            padding-bottom: 80px;
-            transition: background 0.5s, border-color 0.5s;
-        }
-
-        /* RGB FRAME */
-        #rgb-frame {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            z-index: 9998;
-            border: 2px solid transparent;
-            border-image: linear-gradient(45deg, var(--primary-color), var(--secondary-color), #ffdd00, #00ff88, #00ccff, #aa44ff, #ff00aa) 1;
-            animation: rgbBorder 6s linear infinite;
-            box-shadow: 0 0 30px var(--glow-color)66, inset 0 0 30px var(--glow-color)33;
-            opacity: 0.6;
-            transition: opacity 0.4s, border-image 0.5s;
-        }
-        @keyframes rgbBorder {
-            0% {
-                filter: hue-rotate(0deg);
-            }
-            100% {
-                filter: hue-rotate(360deg);
-            }
-        }
-
-        /* LOGIN SCREEN */
-        #loginScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg-color);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            padding: 24px;
-            transition: opacity 0.6s, background 0.5s;
-        }
-        #loginScreen.show {
-            display: flex;
-        }
-        .login-card {
-            background: var(--card-bg);
-            padding: 28px 22px;
-            border-radius: 32px;
-            width: 100%;
-            max-width: 360px;
-            border: 1.5px solid transparent;
-            background-clip: padding-box;
-            box-shadow: 0 0 40px var(--glow-color)33;
-            position: relative;
-            z-index: 10001;
-            transition: background 0.5s, box-shadow 0.5s;
-        }
-        .login-card::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: 34px;
-            padding: 2px;
-            background: conic-gradient(var(--primary-color), var(--secondary-color), #ffdd00, #00ff88, #00ccff, #aa44ff, #ff00aa, var(--primary-color));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            animation: spin 6s linear infinite;
-            z-index: -1;
-        }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .login-title {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
-            transition: background 0.5s;
-        }
-        .login-sub {
-            text-align: center;
-            color: #aaa;
-            font-size: 12px;
-            letter-spacing: 3px;
-            margin: 4px 0 20px;
-        }
-        .login-input {
-            background: #0f0b0c;
-            border: 1px solid var(--border-color);
-            border-radius: 60px;
-            padding: 14px 20px;
-            width: 100%;
-            color: #fff;
-            font-size: 15px;
-            outline: none;
-            transition: 0.3s;
-            position: relative;
-            z-index: 10002;
-        }
-        .login-input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 20px var(--glow-color)44;
-        }
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 60px;
-            background: var(--accent-gradient);
-            color: #fff;
-            font-weight: 700;
-            font-size: 16px;
-            letter-spacing: 2px;
-            box-shadow: 0 0 30px var(--glow-color)66;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 16px;
-            position: relative;
-            z-index: 10002;
-            touch-action: manipulation;
-        }
-        .login-btn:active {
-            transform: scale(0.96);
-        }
-        .login-btn-free {
-            background: linear-gradient(135deg, #1a3a1a, #00aa44);
-            box-shadow: 0 0 30px #00ff8866;
-        }
-        .login-btn-guest {
-            background: linear-gradient(135deg, #1a1a3a, var(--guest-color));
-            box-shadow: 0 0 30px var(--guest-color)66;
-        }
-        .login-error {
-            color: var(--primary-color);
-            font-size: 13px;
-            margin-top: 12px;
-            text-align: center;
-            background: #1a0a0a;
-            padding: 8px;
-            border-radius: 40px;
-            display: none;
-            position: relative;
-            z-index: 10002;
-        }
-        .login-footer {
-            margin-top: 20px;
-            font-size: 11px;
-            color: #666;
-            text-align: center;
-            position: relative;
-            z-index: 10002;
-        }
-        .password-toggle {
-            position: absolute;
-            right: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-            cursor: pointer;
-            z-index: 10003;
-            background: transparent;
-            border: none;
-            font-size: 16px;
-        }
-        .login-divider {
-            display: flex;
-            align-items: center;
-            margin: 16px 0;
-            color: #555;
-            font-size: 11px;
-        }
-        .login-divider::before,
-        .login-divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .login-divider::before {
-            margin-right: 12px;
-        }
-        .login-divider::after {
-            margin-left: 12px;
-        }
-
-        /* MAIN DASH */
-        .container {
-            padding: 16px 16px 20px;
-            display: none;
-        }
-        .container.show {
-            display: block;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
-        .logo {
-            font-size: 20px;
-            font-weight: 800;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
-            transition: background 0.5s;
-        }
-        .dev-name {
-            font-size: 10px;
-            color: var(--dev-color);
-            letter-spacing: 2px;
-            text-shadow: 0 0 20px var(--dev-color)44;
-            font-weight: 600;
-            animation: devGlow 2s infinite;
-        }
-        @keyframes devGlow {
-            0%, 100% { text-shadow: 0 0 10px var(--dev-color)44; }
-            50% { text-shadow: 0 0 30px var(--dev-color)88, 0 0 60px var(--dev-color)44; }
-        }
-        .status-badge {
-            background: #0a1f0a;
-            color: #00ff88;
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-size: 10px;
-            border: 1px solid #00ff8844;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .clock {
-            font-size: 12px;
-            color: #aaa;
             background: #0a0a0a;
-            padding: 4px 14px;
-            border-radius: 40px;
-            border: 1px solid #333;
-        }
-        .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin: 22px 0 12px;
+            min-height: 100vh;
             display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 8px;
-            border-left: 4px solid var(--primary-color);
-            padding-left: 12px;
-            transition: border-color 0.5s;
+            font-family: 'Courier New', 'Segoe UI', monospace;
+            overflow: hidden;
+            position: relative;
         }
-        .card-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+
+        /* ====== MATRIX BACKGROUND ====== */
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            background: #0a0a0a;
+            overflow: hidden;
         }
-        .card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 16px 14px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 20px #00000055;
-            transition: 0.2s, background 0.5s, border-color 0.5s;
+
+        #matrix-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 255, 65, 0.03) 2px,
+                    rgba(0, 255, 65, 0.03) 4px
+                );
+            animation: matrixScan 8s linear infinite;
+        }
+
+        @keyframes matrixScan {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        /* ====== MATRIX RAIN ====== */
+        #matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            opacity: 0.15;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #00ff41;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .rain-column {
+            position: absolute;
+            top: -100%;
+            animation: rainFall linear infinite;
+            white-space: nowrap;
+            letter-spacing: 2px;
+            opacity: 0.6;
+        }
+
+        @keyframes rainFall {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(110vh); opacity: 0; }
+        }
+
+        /* ====== MAIN CONTAINER ====== */
+        .main-container {
+            position: relative;
+            z-index: 1;
+            max-width: 500px;
+            width: 90%;
+            padding: 20px;
+        }
+
+        /* ====== CARD ====== */
+        .maintenance-card {
+            background: rgba(10, 10, 10, 0.92);
+            border: 1px solid #00ff41;
+            border-radius: 8px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 
+                0 0 40px rgba(0, 255, 65, 0.1),
+                inset 0 0 40px rgba(0, 255, 65, 0.05);
             position: relative;
             overflow: hidden;
         }
-        .card-vip {
-            border: 1px solid transparent;
-            animation: rgbCardBorder 4s linear infinite;
-            background: #0f0a0c;
-        }
-        .card-vip::before {
+
+        .maintenance-card::before {
             content: '';
             position: absolute;
-            inset: -1px;
-            border-radius: 22px;
-            padding: 1px;
-            background: conic-gradient(var(--primary-color), var(--secondary-color), #ffdd00, #00ff88, #00ccff, #aa44ff, #ff00aa, var(--primary-color));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            animation: spin 6s linear infinite;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 65, 0.03) 0%, transparent 70%);
+            animation: glowPulse 4s ease-in-out infinite;
+            pointer-events: none;
         }
-        .badge-free {
-            background: #2a1a1a;
-            color: var(--free-color);
-            font-size: 9px;
-            padding: 2px 10px;
-            border-radius: 40px;
+
+        @keyframes glowPulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
         }
-        .badge-vip {
-            background: #2a1a2a;
-            color: var(--vip-color);
-            font-size: 9px;
-            padding: 2px 10px;
-            border-radius: 40px;
-            border: 1px solid var(--vip-color)66;
+
+        /* ====== SCANLINE ====== */
+        .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(0deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 255, 65, 0.02) 3px,
+                rgba(0, 255, 65, 0.02) 4px
+            );
+            pointer-events: none;
+            animation: scanlineMove 3s linear infinite;
+            border-radius: 8px;
         }
-        .badge-guest {
-            background: #1a1a3a;
-            color: var(--guest-color);
-            font-size: 9px;
-            padding: 2px 10px;
-            border-radius: 40px;
-            border: 1px solid var(--guest-color)66;
+
+        @keyframes scanlineMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
         }
-        .toggle {
-            width: 36px;
+
+        /* ====== CORNER DECORATIONS ====== */
+        .corner {
+            position: absolute;
+            width: 20px;
             height: 20px;
-            background: #2a1a1a;
-            border-radius: 40px;
+            border-color: #00ff41;
+            border-style: solid;
+            border-width: 0;
+            opacity: 0.6;
+        }
+
+        .corner-tl {
+            top: 8px;
+            left: 8px;
+            border-top-width: 2px;
+            border-left-width: 2px;
+        }
+
+        .corner-tr {
+            top: 8px;
+            right: 8px;
+            border-top-width: 2px;
+            border-right-width: 2px;
+        }
+
+        .corner-bl {
+            bottom: 8px;
+            left: 8px;
+            border-bottom-width: 2px;
+            border-left-width: 2px;
+        }
+
+        .corner-br {
+            bottom: 8px;
+            right: 8px;
+            border-bottom-width: 2px;
+            border-right-width: 2px;
+        }
+
+        /* ====== CONTENT ====== */
+        .icon-main {
+            font-size: 60px;
+            color: #00ff41;
+            margin-bottom: 20px;
+            display: block;
+            animation: iconPulse 2s ease-in-out infinite;
+            text-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
             position: relative;
-            cursor: pointer;
-            transition: 0.3s;
-            flex-shrink: 0;
-            touch-action: manipulation;
+            z-index: 1;
         }
-        .toggle.active {
-            background: var(--primary-color);
-            box-shadow: 0 0 20px var(--glow-color)88;
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
         }
-        .toggle::after {
-            content: '';
-            width: 16px;
-            height: 16px;
-            background: #fff;
-            border-radius: 40px;
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            transition: 0.25s;
+
+        .title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #00ff41;
+            letter-spacing: 4px;
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+            position: relative;
+            z-index: 1;
+            font-family: 'Courier New', monospace;
         }
-        .toggle.active::after {
-            left: 18px;
+
+        .title .v7 {
+            font-size: 16px;
+            color: #00ccff;
+            text-shadow: 0 0 20px rgba(0, 204, 255, 0.3);
         }
-        .flex-row {
+
+        .title .cursor {
+            animation: blinkText 1s infinite;
+        }
+
+        @keyframes blinkText {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .sub-title {
+            font-size: 14px;
+            color: #888;
+            margin: 10px 0 25px;
+            letter-spacing: 3px;
+            position: relative;
+            z-index: 1;
+            font-family: 'Courier New', monospace;
+        }
+
+        .sub-title .highlight {
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        /* ====== PROGRESS BAR ====== */
+        .progress-container {
+            margin: 25px 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-label {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-        }
-        .mt-1 {
-            margin-top: 6px;
-        }
-        .text-muted {
-            color: #777;
-            font-size: 11px;
-        }
-
-        /* VIP EXPIRY */
-        .vip-expiry {
-            background: #1a1a0a;
-            padding: 4px 12px;
-            border-radius: 40px;
             font-size: 10px;
-            border: 1px solid var(--vip-color)44;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--vip-color);
-        }
-        .vip-expiry .expiry-days {
-            color: var(--free-color);
-            font-weight: 700;
-        }
-        .vip-expiry .expiry-days.urgent {
-            color: var(--expired-color);
-            animation: blink 1s infinite;
-        }
-        .vip-expiry .expiry-forever {
-            color: #00ff88;
-        }
-        .vip-expiry .expiry-hours {
-            color: var(--warning-color);
-            font-weight: 700;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        /* TERMINAL */
-        .terminal {
-            background: #050505;
-            border-radius: 16px;
-            padding: 14px;
-            border: 1px solid #1a3a1a;
+            color: #555;
+            margin-bottom: 6px;
             font-family: 'Courier New', monospace;
-            font-size: 11px;
-            color: #00ff88;
-            max-height: 200px;
-            overflow-y: auto;
-            margin: 12px 0;
-        }
-        .terminal .log {
-            opacity: 0.8;
-            border-bottom: 1px solid #0a1a0a;
-            padding: 2px 0;
+            letter-spacing: 1px;
         }
 
-        /* MUSIC */
-        .music-player {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 16px;
-            border: 1px solid var(--border-color);
-            margin: 16px 0;
-            transition: background 0.5s, border-color 0.5s;
+        .progress-label .percent {
+            color: #00ff41;
         }
-        .music-controls {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .music-btn {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 22px;
-            cursor: pointer;
-            padding: 4px;
-            touch-action: manipulation;
-            transition: 0.1s;
-        }
-        .music-btn:active {
-            transform: scale(0.85);
-        }
+
         .progress-bar {
-            height: 4px;
-            background: #2a1a1a;
-            border-radius: 10px;
-            flex: 1;
-            position: relative;
-            cursor: pointer;
+            width: 100%;
+            height: 3px;
+            background: #1a1a1a;
+            border-radius: 2px;
+            overflow: hidden;
+            border: 1px solid #1a1a1a;
         }
+
         .progress-fill {
             height: 100%;
             width: 0%;
-            background: var(--primary-color);
-            border-radius: 10px;
-            transition: background 0.5s;
-        }
-        .visualizer {
-            display: flex;
-            gap: 3px;
-            height: 30px;
-            align-items: flex-end;
-            margin: 10px 0;
-        }
-        .visualizer .bar {
-            flex: 1;
-            background: var(--primary-color);
-            border-radius: 4px;
-            transition: height 0.1s, background 0.5s;
-            min-height: 4px;
+            background: linear-gradient(90deg, #00ff41, #00ccff);
+            border-radius: 2px;
+            animation: progressLoad 4s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         }
 
-        /* PERF */
-        .perf-container {
+        @keyframes progressLoad {
+            0% { width: 0%; }
+            50% { width: 75%; }
+            70% { width: 85%; }
+            100% { width: 95%; }
+        }
+
+        /* ====== STATUS MESSAGES ====== */
+        .status-messages {
+            margin: 15px 0 20px;
+            text-align: left;
             position: relative;
-            background: #050505;
-            border-radius: 16px;
-            border: 1px solid #1a1a1a;
-            overflow: hidden;
-            padding: 4px;
-        }
-        .perf-container canvas {
-            width: 100%;
-            height: 120px;
-            display: block;
-            border-radius: 12px;
-        }
-        .perf-labels {
-            position: absolute;
-            top: 8px;
-            left: 12px;
-            right: 12px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 9px;
-            color: #555;
-            pointer-events: none;
-            z-index: 2;
-        }
-        .perf-labels span {
-            background: rgba(0,0,0,0.6);
-            padding: 2px 8px;
-            border-radius: 20px;
-            border: 1px solid #1a1a1a;
-        }
-        .perf-stats {
-            position: absolute;
-            bottom: 8px;
-            left: 12px;
-            right: 12px;
-            display: flex;
-            justify-content: space-around;
-            font-size: 10px;
-            color: #888;
-            pointer-events: none;
-            z-index: 2;
-        }
-        .perf-stats span {
-            background: rgba(0,0,0,0.7);
-            padding: 2px 10px;
-            border-radius: 20px;
-            border: 1px solid #1a1a1a;
-            font-weight: 600;
-        }
-        .perf-stats .cpu-color { color: #ff6b6b; }
-        .perf-stats .ram-color { color: #ffd93d; }
-        .perf-stats .fps-color { color: #6bcbff; }
-
-        /* BOTTOM NAV */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(5,5,5,0.85);
-            backdrop-filter: blur(16px);
-            border-top: 1px solid var(--primary-color)33;
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0 env(safe-area-inset-bottom, 8px) 0;
-            z-index: 999;
-            max-width: 430px;
-            margin: 0 auto;
-            transition: border-color 0.5s;
-        }
-        .nav-item {
-            color: #666;
-            font-size: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-            flex: 1;
-            padding: 4px 0;
-            touch-action: manipulation;
-        }
-        .nav-item i {
-            font-size: 18px;
-            display: block;
-            margin-bottom: 2px;
-        }
-        .nav-item.active {
-            color: var(--primary-color);
-            text-shadow: 0 0 20px var(--glow-color)88;
-        }
-        .nav-item:active {
-            transform: scale(0.9);
+            z-index: 1;
         }
 
-        /* TOAST */
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 99999;
-            width: 90%;
-            max-width: 380px;
-        }
-        .toast {
-            background: var(--card-bg);
-            border: 1px solid var(--primary-color)66;
-            border-radius: 60px;
-            padding: 12px 20px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 0 30px var(--glow-color)33;
-            backdrop-filter: blur(6px);
-            animation: slideDown 0.3s ease;
-            transition: opacity 0.3s, background 0.5s, border-color 0.5s;
-        }
-        .toast .progress {
-            height: 3px;
-            background: var(--primary-color);
-            border-radius: 10px;
-            flex: 1;
-            animation: toastProgress 2.5s linear forwards;
-        }
-        @keyframes toastProgress {
-            from { width: 100%; }
-            to { width: 0%; }
-        }
-
-        /* MODAL */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            padding: 24px;
-            opacity: 0;
-            pointer-events: none;
-            transition: 0.3s;
-        }
-        .modal-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .modal-card {
-            background: var(--card-bg);
-            border-radius: 32px;
-            padding: 28px 24px;
-            max-width: 400px;
-            width: 100%;
-            border: 1px solid var(--primary-color)66;
-            box-shadow: 0 0 60px var(--glow-color)33;
-            max-height: 90vh;
-            overflow-y: auto;
-            transition: background 0.5s, border-color 0.5s;
-        }
-        .modal-card .modal-title {
-            color: var(--primary-color);
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .modal-card .modal-close {
-            background: none;
-            border: none;
-            color: #888;
-            font-size: 20px;
-            cursor: pointer;
-            margin-left: auto;
-            padding: 4px 8px;
-        }
-        .modal-card input {
-            background: #0f0b0c;
-            border: 1px solid var(--border-color);
-            border-radius: 60px;
-            padding: 12px 18px;
-            width: 100%;
-            color: #fff;
-            transition: border-color 0.3s;
-        }
-        .modal-card input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-        .modal-card select {
-            background: #0f0b0c;
-            border: 1px solid var(--border-color);
-            border-radius: 60px;
-            padding: 8px 16px;
-            color: #fff;
-            width: 100%;
-        }
-
-        /* LOADING */
-        .loading-screen {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-color);
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.8s, background 0.5s;
-        }
-        .loading-screen.hide {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .loading-screen .bar {
-            width: 200px;
-            height: 4px;
-            background: #1a1a1a;
-            border-radius: 10px;
-            margin-top: 20px;
-            overflow: hidden;
-        }
-        .loading-screen .bar-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--accent-gradient);
-        }
-        .loading-title {
-            font-size: 28px;
-            font-weight: 800;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        @media (max-width: 400px) {
-            .card-grid { gap: 8px; }
-            .card { padding: 12px; }
-            .perf-container canvas { height: 100px; }
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes rgbCardBorder {
-            0% { border-color: var(--primary-color)66; }
-            25% { border-color: var(--secondary-color)66; }
-            50% { border-color: #00ff8866; }
-            75% { border-color: #aa44ff66; }
-            100% { border-color: var(--primary-color)66; }
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-10px); }
-            40% { transform: translateX(10px); }
-            60% { transform: translateX(-5px); }
-            80% { transform: translateX(5px); }
-        }
-        .hidden { display: none !important; }
-        .vip-lock {
-            color: var(--free-color);
-            font-size: 10px;
-            cursor: pointer;
-        }
-        .vip-lock:hover { text-decoration: underline; }
-        .mt-2 { margin-top: 12px; }
-        .gap-2 { gap: 12px; }
-        .text-center { text-align: center; }
-
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            background: #2a1a1a;
-            height: 4px;
-            border-radius: 10px;
-            outline: none;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            cursor: pointer;
-            box-shadow: 0 0 10px var(--glow-color)88;
-        }
-
-        .click-feedback {
-            animation: clickPulse 0.15s ease;
-        }
-        @keyframes clickPulse {
-            0% { transform: scale(0.95); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        /* CHAT */
-        .chat-bubble {
-            position: fixed;
-            bottom: 85px;
-            right: 16px;
-            z-index: 9997;
-            cursor: pointer;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: var(--accent-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 30px var(--glow-color)66, 0 0 60px var(--glow-color)44;
-            transition: 0.3s;
-            animation: chatPulse 2s infinite;
-        }
-        .chat-bubble:hover { transform: scale(1.1); }
-        .chat-bubble:active { transform: scale(0.9); }
-        .chat-bubble i { font-size: 24px; color: #fff; }
-        .chat-bubble .badge-count {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: var(--primary-color);
-            color: #fff;
-            font-size: 10px;
-            font-weight: 700;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--bg-color);
-        }
-        .chat-bubble .badge-count.show { display: flex; }
-        @keyframes chatPulse {
-            0%, 100% { box-shadow: 0 0 30px var(--glow-color)66, 0 0 60px var(--glow-color)44; }
-            50% { box-shadow: 0 0 50px var(--glow-color)88, 0 0 80px var(--glow-color)66; }
-        }
-
-        .chat-box {
-            position: fixed;
-            bottom: 150px;
-            right: 16px;
-            width: 340px;
-            max-width: calc(100vw - 32px);
-            max-height: 450px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            border: 1px solid var(--primary-color)66;
-            box-shadow: 0 0 60px var(--glow-color)33, 0 0 120px var(--glow-color)22;
-            z-index: 9998;
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            backdrop-filter: blur(20px);
-            animation: chatSlideUp 0.3s ease;
-            transition: background 0.5s, border-color 0.5s;
-        }
-        .chat-box.open { display: flex; }
-        @keyframes chatSlideUp {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .chat-header {
-            padding: 12px 16px;
-            background: linear-gradient(135deg, #1a0a2a, #2a0a3a);
-            border-bottom: 1px solid var(--primary-color)44;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        .chat-header .chat-title {
-            color: var(--primary-color);
-            font-weight: 700;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .chat-header .chat-title i { font-size: 16px; }
-        .chat-header .chat-close {
-            background: none;
-            border: none;
-            color: #888;
-            font-size: 18px;
-            cursor: pointer;
-            padding: 4px 8px;
-        }
-        .chat-header .chat-close:hover { color: #fff; }
-
-        .chat-messages {
-            flex: 1;
-            padding: 12px 16px;
-            overflow-y: auto;
-            max-height: 300px;
-            min-height: 200px;
-            background: #050505;
-        }
-        .chat-messages::-webkit-scrollbar { width: 2px; }
-        .chat-messages::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
-
-        .chat-msg {
-            margin-bottom: 8px;
-            padding: 8px 12px;
-            border-radius: 12px;
-            max-width: 85%;
-            word-wrap: break-word;
-            animation: msgIn 0.2s ease;
-        }
-        .chat-msg.own {
-            background: linear-gradient(135deg, #1a0a2a, #2a0a4a);
-            border: 1px solid var(--primary-color)44;
-            margin-left: auto;
-            border-bottom-right-radius: 4px;
-        }
-        .chat-msg.other {
-            background: #0f0b0c;
-            border: 1px solid var(--border-color);
-            margin-right: auto;
-            border-bottom-left-radius: 4px;
-        }
-        .chat-msg.msg-bot {
-            background: linear-gradient(135deg, #0a1a0a, #0a2a1a);
-            border: 1px solid #00ff8844;
-            margin-right: auto;
-            border-bottom-left-radius: 4px;
-            max-width: 90%;
-        }
-        .chat-msg .msg-sender {
+        .status-line {
             font-size: 11px;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-        .chat-msg .msg-sender .sender-name { color: var(--vip-color); }
-        .chat-msg .msg-sender .sender-name.bot { color: #00ff88; }
-        .chat-msg .msg-sender .sender-name.vip { color: var(--vip-color); }
-        .chat-msg .msg-sender .sender-name.guest { color: var(--guest-color); }
-        .chat-msg .msg-sender .sender-name.free { color: var(--free-color); }
-        .chat-msg .msg-sender .sender-tag {
-            font-size: 8px;
-            padding: 1px 6px;
-            border-radius: 20px;
-            margin-left: 4px;
-        }
-        .chat-msg .msg-sender .sender-tag.bot-tag {
-            background: #0a1f0a;
-            color: #00ff88;
-            border: 1px solid #00ff8844;
-        }
-        .chat-msg .msg-sender .sender-tag.vip-tag {
-            background: #1a1a0a;
-            color: var(--vip-color);
-            border: 1px solid var(--vip-color)44;
-        }
-        .chat-msg .msg-sender .sender-tag.guest-tag {
-            background: #1a1a3a;
-            color: var(--guest-color);
-            border: 1px solid var(--guest-color)44;
-        }
-        .chat-msg .msg-sender .sender-tag.free-tag {
-            background: #1a0a0a;
-            color: var(--free-color);
-            border: 1px solid var(--free-color)44;
-        }
-        .chat-msg .msg-text {
-            font-size: 13px;
-            color: #ddd;
-        }
-        .chat-msg .msg-text .cmd-highlight {
-            color: var(--vip-color);
-            font-weight: 700;
-        }
-        .chat-msg .msg-text .status-online { color: #00ff88; }
-        .chat-msg .msg-text .status-offline { color: var(--free-color); }
-        .chat-msg .msg-text .vip-color { color: var(--vip-color); }
-        .chat-msg .msg-text .free-color { color: var(--free-color); }
-        .chat-msg .msg-time {
-            font-size: 9px;
             color: #555;
-            text-align: right;
-            margin-top: 2px;
-        }
-        @keyframes msgIn {
-            from { opacity: 0; transform: translateY(10px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .chat-input-area {
-            padding: 10px 12px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: 8px;
-            flex-shrink: 0;
-            background: var(--card-bg);
-            transition: background 0.5s, border-color 0.5s;
-        }
-        .chat-input-area input {
-            flex: 1;
-            background: #0f0b0c;
-            border: 1px solid var(--border-color);
-            border-radius: 60px;
-            padding: 8px 16px;
-            color: #fff;
-            font-size: 13px;
-            outline: none;
-        }
-        .chat-input-area input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 20px var(--glow-color)22;
-        }
-        .chat-input-area input::placeholder { color: #555; }
-        .chat-input-area button {
-            background: var(--accent-gradient);
-            border: none;
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 60px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: 0.2s;
-            flex-shrink: 0;
-        }
-        .chat-input-area button:active { transform: scale(0.95); }
-
-        .chat-online {
-            font-size: 10px;
-            color: #00ff88;
+            padding: 4px 0;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.5px;
+            animation: statusFade 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 10px;
         }
-        .chat-online i { font-size: 8px; }
 
-        /* THEME SELECTOR */
-        .theme-selector {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin: 8px 0;
+        .status-line .prompt {
+            color: #00ff41;
+            opacity: 0.5;
         }
-        .theme-btn {
-            width: 32px;
-            height: 32px;
+
+        .status-line .done {
+            color: #00ff41;
+        }
+
+        .status-line .processing {
+            color: #ffd700;
+            animation: blinkText 1s infinite;
+        }
+
+        .status-line .error {
+            color: #ff6b6b;
+        }
+
+        @keyframes statusFade {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ====== AUTHOR ====== */
+        .author {
+            margin: 20px 0 10px;
+            padding-top: 20px;
+            border-top: 1px solid #1a1a1a;
+            position: relative;
+            z-index: 1;
+        }
+
+        .author-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #00ff88;
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+            font-family: 'Courier New', monospace;
+        }
+
+        .author-sub {
+            font-size: 10px;
+            color: #333;
+            margin-top: 4px;
+            letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .author-sub .heart {
+            color: #ff6b6b;
+            animation: heartBeat 1.5s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* ====== FOOTER ====== */
+        .footer-text {
+            font-size: 9px;
+            color: #222;
+            margin-top: 20px;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
+            font-family: 'Courier New', monospace;
+        }
+
+        .footer-text .blink {
+            animation: blinkText 1.5s infinite;
+        }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 480px) {
+            .maintenance-card {
+                padding: 30px 20px;
+            }
+
+            .title {
+                font-size: 22px;
+                letter-spacing: 2px;
+            }
+
+            .icon-main {
+                font-size: 45px;
+            }
+
+            .sub-title {
+                font-size: 12px;
+                letter-spacing: 2px;
+            }
+
+            .author-name {
+                font-size: 14px;
+            }
+
+            .status-line {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .maintenance-card {
+                padding: 20px 15px;
+            }
+
+            .title {
+                font-size: 18px;
+            }
+
+            .icon-main {
+                font-size: 35px;
+            }
+        }
+
+        /* ====== GLITCH EFFECT ====== */
+        .glitch {
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% { opacity: 1; transform: none; }
+            92% { opacity: 0.8; transform: translateX(-2px); }
+            94% { opacity: 1; transform: translateX(2px); }
+            96% { opacity: 0.8; transform: translateX(-1px); }
+            98% { opacity: 1; transform: translateX(1px); }
+        }
+
+        /* ====== FLOATING PARTICLES ====== */
+        .particle {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: #00ff41;
             border-radius: 50%;
-            border: 2px solid #333;
-            cursor: pointer;
-            transition: 0.3s;
-            touch-action: manipulation;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            animation: particleFloat linear infinite;
         }
-        .theme-btn:hover { transform: scale(1.1); }
-        .theme-btn:active { transform: scale(0.9); }
-        .theme-btn.active { border-color: #fff; box-shadow: 0 0 20px #fff44; }
 
-        @media (max-width: 400px) {
-            .chat-box {
-                right: 8px;
-                width: calc(100vw - 16px);
-                bottom: 140px;
-                max-height: 400px;
+        @keyframes particleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(0) translateX(0) scale(0);
             }
-            .chat-bubble {
-                bottom: 80px;
-                right: 12px;
-                width: 48px;
-                height: 48px;
+            10% {
+                opacity: 0.5;
+                transform: translateY(-20px) translateX(10px) scale(1);
             }
-            .chat-bubble i { font-size: 20px; }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) translateX(-20px) scale(0);
+            }
         }
     </style>
 </head>
 <body>
-    <div id="app">
-        <!-- LOADING -->
-        <div id="loadingScreen" class="loading-screen">
-            <div class="loading-title">⚡ UCHIHA • V6 ⚡</div>
-            <div style="color:#888; margin:8px 0;">KHỞI TẠO HỆ THỐNG...</div>
-            <div class="bar">
-                <div class="bar-fill" id="loadFill"></div>
-            </div>
-            <div id="loadStatus" style="color:#aaa; font-size:12px; margin-top:12px;">Đang tải nhân...</div>
-            <div style="margin-top:16px; font-size:10px; color:#666;">
-                MAKE BY <span style="color:var(--dev-color); font-weight:700;">NGUYEN TIEN HOC</span>
-            </div>
-        </div>
+    <!-- ====== MATRIX BACKGROUND ====== -->
+    <div id="matrix-bg"></div>
 
-        <!-- LOGIN -->
-        <div id="loginScreen">
-            <div class="login-card">
-                <div style="text-align:center; margin-bottom:12px;">
-                    <span class="login-title">⚡ UCHIHA • V6 ⚡</span>
-                    <div style="color:#aaa; font-size:11px; letter-spacing:2px;">HỆ THỐNG TRUY CẬP CAO CẤP</div>
-                    <div style="color:var(--dev-color); font-size:9px; margin-top:4px; letter-spacing:1px; font-weight:600;">
-                        ✦ MAKE BY NGUYEN TIEN HOC ✦
+    <!-- ====== MATRIX RAIN ====== -->
+    <div id="matrix-rain"></div>
+
+    <!-- ====== FLOATING PARTICLES ====== -->
+    <div id="particles"></div>
+
+    <!-- ====== MAIN CONTENT ====== -->
+    <div class="main-container">
+        <div class="maintenance-card">
+            <div class="scanline"></div>
+
+            <!-- Corners -->
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+
+            <!-- Content -->
+            <div style="position: relative; z-index: 1;">
+                <i class="fas fa-code icon-main glitch"></i>
+
+                <div class="title">
+                    ⚡ UCHIHA <span class="v7">v7</span><span class="cursor">_</span>
+                </div>
+
+                <div class="sub-title">
+                    <span class="highlight">⟡</span> SYSTEM MAINTENANCE <span class="highlight">⟡</span>
+                </div>
+
+                <!-- Progress -->
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>UPGRADING TO V7</span>
+                        <span class="percent" id="percentDisplay">73%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
                     </div>
                 </div>
-                <div style="text-align:center; color:#888; font-size:12px; margin-bottom:18px;">
-                    CHÀO MỪNG TRỞ LẠI<br>
-                    <span style="color:#ddd;">CHỈ DÀNH CHO NGƯỜI ĐƯỢC ỦY QUYỀN</span>
-                </div>
-                <div style="position:relative;">
-                    <input type="text" id="usernameInput" class="login-input" placeholder="👤 TÊN ĐĂNG NHẬP" autocomplete="off">
-                </div>
-                <div style="position:relative; margin-top:12px;">
-                    <input type="password" id="passInput" class="login-input" placeholder="🔐 MẬT KHẨU VIP" autocomplete="off">
-                    <button class="password-toggle" id="togglePass" type="button">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
 
-                <button class="login-btn" id="loginBtn" type="button">⚡ ĐĂNG NHẬP VIP ⚡</button>
-
-                <div class="login-divider">HOẶC</div>
-
-                <button class="login-btn login-btn-guest" id="loginGuestBtn" type="button">👤 DÙNG THỬ MIỄN PHÍ</button>
-
-                <div id="loginError" class="login-error">TRUY CẬP BỊ TỪ CHỐI</div>
-                <div class="login-footer" style="font-size:10px; color:#444;">
-                    🔑 Nhập key VIP để truy cập đầy đủ
-                </div>
-            </div>
-        </div>
-
-        <!-- MAIN DASHBOARD -->
-        <div id="dashboard" class="container">
-            <!-- HEADER -->
-            <div class="header">
-                <div>
-                    <div class="logo">⚡ UCHIHA • V6</div>
-                    <div class="dev-name">✦ MAKE BY NGUYEN TIEN HOC ✦</div>
-                </div>
-                <div style="display:flex; gap:8px; align-items:center;">
-                    <span class="status-badge"><i class="fas fa-circle" style="color:#00ff88; font-size:8px;"></i> TRỰC TUYẾN</span>
-                    <span class="clock" id="clockDisplay">--:--</span>
-                </div>
-            </div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:11px; color:#888; margin-bottom:10px;">
-                <span><i class="fas fa-calendar"></i> <span id="dateDisplay"></span></span>
-                <span><i class="fas fa-mobile-alt"></i> <span id="deviceInfo">iPhone</span></span>
-                <span><i class="fas fa-battery-three-quarters"></i> <span id="batteryInfo">--</span></span>
-                <span id="userRoleDisplay" style="color:var(--primary-color); font-weight:600;"></span>
-                <span id="vipExpiryDisplay" style="display:none;"></span>
-            </div>
-
-            <!-- THEME SELECTOR -->
-            <div class="card" style="margin-bottom:12px;">
-                <div class="flex-row">
-                    <span><i class="fas fa-palette"></i> CHỌN GIAO DIỆN</span>
-                </div>
-                <div class="theme-selector">
-                    <button class="theme-btn active" data-theme="default" style="background:linear-gradient(135deg,#ff3b3b,#ffaa00);"></button>
-                    <button class="theme-btn" data-theme="dark-red" style="background:linear-gradient(135deg,#ff1a1a,#ff4400);"></button>
-                    <button class="theme-btn" data-theme="cyber-blue" style="background:linear-gradient(135deg,#00ccff,#00ff88);"></button>
-                    <button class="theme-btn" data-theme="neon-purple" style="background:linear-gradient(135deg,#aa44ff,#ff00aa);"></button>
-                    <button class="theme-btn" data-theme="gold" style="background:linear-gradient(135deg,#ffd700,#ff8800);"></button>
-                </div>
-            </div>
-
-            <!-- ACCOUNT STATUS -->
-            <div class="card" style="border-color:var(--border-color);">
-                <div class="flex-row">
-                    <span><i class="fas fa-user"></i> TRẠNG THÁI TÀI KHOẢN</span>
-                    <span id="planBadge" class="badge-free">MIỄN PHÍ</span>
-                </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:8px; font-size:12px;">
-                    <span>TÀI KHOẢN: <strong id="accName">NTH</strong></span>
-                    <span>GÓI: <strong id="planLabel">FREE</strong></span>
-                    <span>TRẠNG THÁI: <strong style="color:#00ff88;">HOẠT ĐỘNG</strong></span>
-                    <span>TRUY CẬP: <strong id="accessLabel">GIỚI HẠN</strong></span>
-                </div>
-                <div style="margin-top:6px; background:#1a1a1a; border-radius:10px; height:6px; overflow:hidden;">
-                    <div id="progressBar" style="width:40%; background:var(--primary-color); height:100%; border-radius:10px;"></div>
-                </div>
-                <div id="vipExpiryBadge" style="margin-top:8px; display:none;">
-                    <span class="vip-expiry">
-                        <i class="fas fa-clock"></i>
-                        VIP HẾT HẠN: <span id="vipExpiryDate" class="expiry-days">--</span>
-                    </span>
-                </div>
-                <button class="login-btn" id="vipActivateBtn" style="margin-top:10px; padding:10px; font-size:13px; background:var(--accent-gradient);">⭐ KÍCH HOẠT VIP</button>
-            </div>
-
-            <!-- DEVICE PANEL -->
-            <div class="card">
-                <div class="flex-row">
-                    <span><i class="fas fa-microchip"></i> TRẠNG THÁI THIẾT BỊ</span>
-                    <span class="badge-free">● TRỰC TUYẾN</span>
-                </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; font-size:11px; gap:4px; margin-top:6px;">
-                    <span>THIẾT BỊ: <strong id="devDevice">--</strong></span>
-                    <span>HĐH: <strong id="devOs">--</strong></span>
-                    <span>PIN: <strong id="devBattery">--</strong></span>
-                    <span>CPU: <strong id="devCpu">AUTO</strong></span>
-                    <span>RAM: <strong id="devRam">AUTO</strong></span>
-                    <span>FPS: <strong id="devFps">60 FPS</strong></span>
-                    <span>MẠNG: <strong style="color:#00ff88;">ỔN ĐỊNH</strong></span>
-                </div>
-            </div>
-
-            <!-- PERFORMANCE GRAPH -->
-            <div class="section-title"><i class="fas fa-chart-line"></i> GIÁM SÁT HIỆU NĂNG</div>
-            <div class="perf-container">
-                <canvas id="perfCanvas"></canvas>
-                <div class="perf-labels">
-                    <span>📊 HIỆU NĂNG</span>
-                    <span id="perfTime">00:00</span>
-                </div>
-                <div class="perf-stats">
-                    <span class="cpu-color"><i class="fas fa-microchip"></i> CPU: <span id="perfCpu">0</span>%</span>
-                    <span class="ram-color"><i class="fas fa-memory"></i> RAM: <span id="perfRam">0</span>%</span>
-                    <span class="fps-color"><i class="fas fa-tachometer-alt"></i> FPS: <span id="perfFps">60</span></span>
-                </div>
-            </div>
-
-            <!-- GAME CENTER -->
-            <div class="section-title"><i class="fas fa-gamepad"></i> TRUNG TÂM GAME</div>
-            <div class="card-grid">
-                <div class="card" data-game="freefire" style="border-color:var(--primary-color)66; cursor:pointer;">
-                    <div class="flex-row">
-                        <span>🔥 FREE FIRE</span>
-                        <span class="badge-free">iOS</span>
+                <!-- Status Messages -->
+                <div class="status-messages" id="statusMessages">
+                    <div class="status-line">
+                        <span class="prompt">></span>
+                        <span>Initializing quantum kernel...</span>
+                        <span class="done">✓</span>
                     </div>
-                    <div style="font-size:10px; color:#888;">ĐÃ CHỌN: <span id="gameSelected1">-</span></div>
-                </div>
-                <div class="card" data-game="max" style="border-color:var(--secondary-color)66; cursor:pointer;">
-                    <div class="flex-row">
-                        <span>⚡ FREE FIRE MAX</span>
-                        <span class="badge-free">iOS</span>
+                    <div class="status-line">
+                        <span class="prompt">></span>
+                        <span>Loading V7 modules...</span>
+                        <span class="processing">●</span>
                     </div>
-                    <div style="font-size:10px; color:#888;">ĐÃ CHỌN: <span id="gameSelected2">-</span></div>
                 </div>
-            </div>
 
-            <!-- MUSIC PLAYER -->
-            <div class="section-title"><i class="fas fa-music"></i> TRÌNH PHÁT NHẠC</div>
-            <div class="music-player">
-                <div class="flex-row">
-                    <span id="currentTrack">Chưa có bài hát</span>
-                    <span id="timeDisplay">0:00 / 0:00</span>
+                <!-- Author -->
+                <div class="author">
+                    <div class="author-name">✦ NGUYEN TIEN HOC ✦</div>
+                    <div class="author-sub">
+                        <span class="heart">♥</span> PLEASE WAIT <span class="heart">♥</span>
+                    </div>
                 </div>
-                <div class="visualizer" id="visualizer"></div>
-                <div class="music-controls">
-                    <button class="music-btn" id="prevBtn" type="button"><i class="fas fa-step-backward"></i></button>
-                    <button class="music-btn" id="playBtn" type="button"><i class="fas fa-play"></i></button>
-                    <button class="music-btn" id="nextBtn" type="button"><i class="fas fa-step-forward"></i></button>
-                    <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.7" style="width:60px;">
-                    <input type="file" id="uploadMp3" accept="audio/*" style="display:none;" multiple>
-                    <button class="music-btn" id="uploadBtn" type="button"><i class="fas fa-upload"></i></button>
+
+                <!-- Footer -->
+                <div class="footer-text">
+                    <span class="blink">⟡</span> SYSTEM UPGRADE IN PROGRESS <span class="blink">⟡</span><br>
+                    <span style="color:#1a1a1a; font-size:8px;">v7.0 • HACKER EDITION • © 2026</span>
                 </div>
-                <div class="progress-bar" id="progressWrap">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-            </div>
-
-            <!-- FREE FEATURES -->
-            <div class="section-title"><i class="fas fa-bolt"></i> TÍNH NĂNG MIỄN PHÍ</div>
-            <div class="card-grid" id="freeFeatures"></div>
-
-            <!-- VIP FEATURES -->
-            <div class="section-title"><i class="fas fa-crown" style="color:var(--vip-color);"></i> VIP CAO CẤP</div>
-            <div class="card-grid" id="vipFeatures"></div>
-
-            <!-- TERMINAL -->
-            <div class="section-title"><i class="fas fa-terminal"></i> TERMINAL UCHIHA</div>
-            <div class="terminal" id="terminalBox"></div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap; margin:6px 0 12px;">
-                <button class="login-btn" style="padding:6px 16px; font-size:11px; background:#1a1a1a; width:auto;" id="enableAll" type="button">BẬT TẤT CẢ</button>
-                <button class="login-btn" style="padding:6px 16px; font-size:11px; background:#1a1a1a; width:auto;" id="disableAll" type="button">TẮT TẤT CẢ</button>
-                <button class="login-btn" style="padding:6px 16px; font-size:11px; background:#1a1a1a; width:auto;" id="clearTerminal" type="button">XÓA</button>
-            </div>
-
-            <!-- FOOTER -->
-            <div style="text-align:center; padding:20px 0 10px; color:#444; font-size:10px; border-top:1px solid var(--border-color); margin-top:12px;">
-                ⚡ UCHIHA • V6 ⚡<br>
-                BẢNG ĐIỀU KHIỂN HIỆU NĂNG TỐI THƯỢNG<br>
-                <span style="color:var(--dev-color); font-weight:700; font-size:11px;">MAKE BY NGUYEN TIEN HOC</span><br>
-                PHIÊN BẢN 6.0 • © 2026 UCHIHA SYSTEM
-            </div>
-        </div>
-
-        <!-- BOTTOM NAV -->
-        <div class="bottom-nav" id="bottomNav">
-            <div class="nav-item active" data-target="dashboard"><i class="fas fa-home"></i> TRANG CHỦ</div>
-            <div class="nav-item" data-target="game"><i class="fas fa-gamepad"></i> GAME</div>
-            <div class="nav-item" data-target="features"><i class="fas fa-bolt"></i> TÍNH NĂNG</div>
-            <div class="nav-item" data-target="vip"><i class="fas fa-crown"></i> VIP</div>
-            <div class="nav-item" id="settingsNav"><i class="fas fa-cog"></i> CÀI ĐẶT</div>
-        </div>
-
-        <!-- SETTINGS MODAL -->
-        <div class="modal-overlay" id="settingsModal">
-            <div class="modal-card">
-                <h3 style="margin-bottom:12px; display:flex; justify-content:space-between;">
-                    <span><i class="fas fa-cog"></i> CÀI ĐẶT</span>
-                    <button id="closeSettings" style="background:none; border:none; color:#888; font-size:20px; cursor:pointer; touch-action:manipulation;">✕</button>
-                </h3>
-                <div id="settingsContent"></div>
-                <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
-                    <button id="resetSettings" style="background:#2a1a1a; border:none; color:#fff; padding:8px 16px; border-radius:40px; cursor:pointer; touch-action:manipulation;">KHÔI PHỤC</button>
-                    <button id="logoutBtn" style="background:#3a1a1a; border:none; color:var(--free-color); padding:8px 16px; border-radius:40px; cursor:pointer; touch-action:manipulation;">ĐĂNG XUẤT</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- VIP MODAL -->
-        <div class="modal-overlay" id="vipModal">
-            <div class="modal-card">
-                <h3 style="margin-bottom:8px;">⭐ NHẬP KEY VIP</h3>
-                <input type="text" id="vipKeyInput" placeholder="🔑 NHẬP KEY VIP" style="margin:8px 0;">
-                <button id="vipConfirmBtn" class="login-btn" style="padding:10px;" type="button">KÍCH HOẠT VIP</button>
-                <div id="vipError" style="color:var(--free-color); font-size:12px; margin-top:6px;"></div>
-            </div>
-        </div>
-
-        <!-- CHAT BUBBLE -->
-        <div class="chat-bubble" id="chatBubble" title="Chat toàn server">
-            <i class="fas fa-comment-dots"></i>
-            <span class="badge-count" id="chatBadge">0</span>
-        </div>
-
-        <!-- CHAT BOX -->
-        <div class="chat-box" id="chatBox">
-            <div class="chat-header">
-                <div class="chat-title">
-                    <i class="fas fa-globe"></i>
-                    <span>SERVER CHAT</span>
-                    <span class="chat-online"><i class="fas fa-circle"></i> <span id="onlineCount">0</span></span>
-                </div>
-                <button class="chat-close" id="chatClose"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="chat-messages" id="chatMessages"></div>
-            <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="Nhập tin nhắn hoặc lệnh /help..." maxlength="200">
-                <button id="chatSendBtn"><i class="fas fa-paper-plane"></i> GỬI</button>
-            </div>
-            <div style="padding:4px 12px 8px; font-size:9px; color:#555; text-align:center; border-top:1px solid var(--border-color);">
-                🤖 Chat Bot: Nhập <span style="color:var(--vip-color);">/help</span> để xem danh sách lệnh
             </div>
         </div>
     </div>
 
-    <div id="rgb-frame"></div>
-    <div class="toast-container" id="toastContainer"></div>
-
     <script>
-        (function() {
-            // ============================================
-            // 1. THEME SYSTEM
-            // ============================================
-            function setTheme(themeName) {
-                if (themeName === 'default') {
-                    document.body.removeAttribute('class');
-                } else {
-                    document.body.className = 'theme-' + themeName;
+        // ============================================
+        // MATRIX RAIN
+        // ============================================
+        function createMatrixRain() {
+            const container = document.getElementById('matrix-rain');
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+-=';
+            const numColumns = Math.floor(window.innerWidth / 20);
+
+            for (let i = 0; i < numColumns; i++) {
+                const col = document.createElement('div');
+                col.className = 'rain-column';
+                const length = Math.floor(Math.random() * 20) + 10;
+                let text = '';
+                for (let j = 0; j < length; j++) {
+                    text += chars[Math.floor(Math.random() * chars.length)];
+                    if (j < length - 1) text += ' ';
                 }
-                localStorage.setItem('uchiha_theme', themeName);
-                document.querySelectorAll('.theme-btn').forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.theme === themeName);
-                });
+                col.textContent = text;
+                col.style.left = (i * 20) + 'px';
+                col.style.fontSize = (Math.random() * 8 + 10) + 'px';
+                col.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                col.style.animationDelay = (Math.random() * 20) + 's';
+                container.appendChild(col);
             }
+        }
 
-            // Load theme
-            const savedTheme = localStorage.getItem('uchiha_theme') || 'default';
-            if (savedTheme !== 'default') {
-                document.body.className = 'theme-' + savedTheme;
+        createMatrixRain();
+
+        // ============================================
+        // FLOATING PARTICLES
+        // ============================================
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const count = 30;
+
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 8 + 6) + 's';
+                particle.style.animationDelay = (Math.random() * 8) + 's';
+                particle.style.width = (Math.random() * 3 + 1) + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
             }
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                if (btn.dataset.theme === savedTheme) {
-                    btn.classList.add('active');
-                }
-            });
+        }
 
-            // Theme buttons
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const theme = this.dataset.theme;
-                    setTheme(theme);
-                    addClickFeedback(this);
-                    showToast('Đã đổi giao diện: ' + theme.toUpperCase(), '🎨', '#00ff88');
-                });
-            });
+        createParticles();
 
-            // ============================================
-            // 2. CLICK SOUND
-            // ============================================
-            let audioCtxGlobal = null;
+        // ============================================
+        // PROGRESS BAR SIMULATION
+        // ============================================
+        let progress = 0;
+        const progressFill = document.getElementById('progressFill');
+        const percentDisplay = document.getElementById('percentDisplay');
+        const statusMessages = document.getElementById('statusMessages');
 
-            function playClickSound() {
-                try {
-                    if (!audioCtxGlobal) {
-                        audioCtxGlobal = new(window.AudioContext || window.webkitAudioContext)();
-                    }
-                    
-                    const now = audioCtxGlobal.currentTime;
-                    
-                    const osc1 = audioCtxGlobal.createOscillator();
-                    const gain1 = audioCtxGlobal.createGain();
-                    osc1.connect(gain1);
-                    gain1.connect(audioCtxGlobal.destination);
-                    osc1.frequency.value = 880;
-                    osc1.type = 'sine';
-                    gain1.gain.setValueAtTime(0.12, now);
-                    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-                    osc1.start(now);
-                    osc1.stop(now + 0.08);
+        const statusSteps = [
+            { text: 'Initializing quantum kernel...', done: true },
+            { text: 'Loading V7 modules...', done: false },
+            { text: 'Configuring hacker interface...', done: false },
+            { text: 'Optimizing performance...', done: false },
+            { text: 'Loading VIP features...', done: false },
+            { text: 'Finalizing system upgrade...', done: false },
+        ];
 
-                    const osc2 = audioCtxGlobal.createOscillator();
-                    const gain2 = audioCtxGlobal.createGain();
-                    osc2.connect(gain2);
-                    gain2.connect(audioCtxGlobal.destination);
-                    osc2.frequency.value = 1320;
-                    osc2.type = 'sine';
-                    gain2.gain.setValueAtTime(0.05, now + 0.02);
-                    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-                    osc2.start(now + 0.02);
-                    osc2.stop(now + 0.1);
+        let currentStep = 1;
 
-                    const osc3 = audioCtxGlobal.createOscillator();
-                    const gain3 = audioCtxGlobal.createGain();
-                    osc3.connect(gain3);
-                    gain3.connect(audioCtxGlobal.destination);
-                    osc3.frequency.value = 600;
-                    osc3.type = 'square';
-                    gain3.gain.setValueAtTime(0.03, now + 0.01);
-                    gain3.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-                    osc3.start(now + 0.01);
-                    osc3.stop(now + 0.06);
+        function updateProgress() {
+            progress += Math.random() * 2 + 0.5;
+            if (progress > 95) progress = 95;
 
-                } catch (e) {
-                    try {
-                        const ctx = new(window.AudioContext || window.webkitAudioContext)();
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.connect(gain);
-                        gain.connect(ctx.destination);
-                        osc.frequency.value = 880;
-                        osc.type = 'sine';
-                        gain.gain.setValueAtTime(0.1, ctx.currentTime);
-                        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-                        osc.start(ctx.currentTime);
-                        osc.stop(ctx.currentTime + 0.08);
-                    } catch (e2) {}
-                }
-            }
+            progressFill.style.width = progress + '%';
+            percentDisplay.textContent = Math.floor(progress) + '%';
 
-            // ============================================
-            // 3. CORE FUNCTIONS
-            // ============================================
-            function addClickFeedback(el) {
-                if (!el) return;
-                el.classList.remove('click-feedback');
-                void el.offsetWidth;
-                el.classList.add('click-feedback');
-                playClickSound();
-            }
-
-            function showToast(msg, icon = '✓', color = '#00ff88') {
-                const container = document.getElementById('toastContainer');
-                const div = document.createElement('div');
-                div.className = 'toast';
-                div.innerHTML =
-                    `<span style="color:${color}; font-size:18px;">${icon}</span> <span style="flex:1;">${msg}</span> <span class="progress"></span>`;
-                container.appendChild(div);
-                setTimeout(() => {
-                    div.style.opacity = '0';
-                    setTimeout(() => div.remove(), 300);
-                }, 2600);
-            }
-
-            // ============================================
-            // 4. LOADING
-            // ============================================
-            function showLoginScreen() {
-                const loadingScreen = document.getElementById('loadingScreen');
-                const loginScreen = document.getElementById('loginScreen');
-                if (loadingScreen) {
-                    loadingScreen.classList.add('hide');
-                    setTimeout(() => {
-                        loadingScreen.style.display = 'none';
-                    }, 800);
-                }
-                if (loginScreen) {
-                    loginScreen.classList.add('show');
-                    loginScreen.style.opacity = '1';
-                }
-                console.log('✅ Đã chuyển sang màn hình đăng nhập');
-            }
-
-            const loadFill = document.getElementById('loadFill');
-            const loadStatus = document.getElementById('loadStatus');
-            let loadProgress = 0;
-            const loadSteps = ['Đang tải nhân...', 'Đang tải giao diện...', 'Đang tải mô-đun...', 'Kiểm tra thiết bị...', 'Hệ thống sẵn sàng.'];
-            let stepIdx = 0;
-            
-            const loadInterval = setInterval(() => {
-                loadProgress += 8;
-                if (loadFill) {
-                    loadFill.style.width = Math.min(loadProgress, 100) + '%';
-                }
-                if (loadProgress > 20 && stepIdx < loadSteps.length - 1) {
-                    stepIdx++;
-                    if (loadStatus) {
-                        loadStatus.textContent = loadSteps[stepIdx] || 'Hệ thống sẵn sàng.';
-                    }
-                }
-                if (loadProgress >= 100) {
-                    clearInterval(loadInterval);
-                    showLoginScreen();
-                }
-            }, 80);
-
-            setTimeout(() => {
-                if (loadProgress < 100) {
-                    console.warn('⚠️ Loading bị kẹt, chuyển sang login screen');
-                    if (loadFill) loadFill.style.width = '100%';
-                    showLoginScreen();
-                }
-            }, 5000);
-
-            // ============================================
-            // 5. DOM REFS
-            // ============================================
-            const loginScreen = document.getElementById('loginScreen');
-            const dashboard = document.getElementById('dashboard');
-            const usernameInput = document.getElementById('usernameInput');
-            const passInput = document.getElementById('passInput');
-            const loginBtn = document.getElementById('loginBtn');
-            const loginGuestBtn = document.getElementById('loginGuestBtn');
-            const loginError = document.getElementById('loginError');
-            const togglePass = document.getElementById('togglePass');
-            const clockDisplay = document.getElementById('clockDisplay');
-            const dateDisplay = document.getElementById('dateDisplay');
-            const deviceInfo = document.getElementById('deviceInfo');
-            const batteryInfo = document.getElementById('batteryInfo');
-            const planBadge = document.getElementById('planBadge');
-            const planLabel = document.getElementById('planLabel');
-            const accessLabel = document.getElementById('accessLabel');
-            const progressBar = document.getElementById('progressBar');
-            const vipActivateBtn = document.getElementById('vipActivateBtn');
-            const vipModal = document.getElementById('vipModal');
-            const vipKeyInput = document.getElementById('vipKeyInput');
-            const vipConfirmBtn = document.getElementById('vipConfirmBtn');
-            const vipError = document.getElementById('vipError');
-            const terminalBox = document.getElementById('terminalBox');
-            const settingsModal = document.getElementById('settingsModal');
-            const settingsContent = document.getElementById('settingsContent');
-            const perfCanvas = document.getElementById('perfCanvas');
-            const ctx = perfCanvas.getContext('2d');
-            const visualizer = document.getElementById('visualizer');
-            const playBtn = document.getElementById('playBtn');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const uploadBtn = document.getElementById('uploadBtn');
-            const uploadMp3 = document.getElementById('uploadMp3');
-            const volumeSlider = document.getElementById('volumeSlider');
-            const progressFill = document.getElementById('progressFill');
-            const progressWrap = document.getElementById('progressWrap');
-            const timeDisplay = document.getElementById('timeDisplay');
-            const currentTrack = document.getElementById('currentTrack');
-            const perfCpu = document.getElementById('perfCpu');
-            const perfRam = document.getElementById('perfRam');
-            const perfFps = document.getElementById('perfFps');
-            const perfTime = document.getElementById('perfTime');
-            const userRoleDisplay = document.getElementById('userRoleDisplay');
-            const vipExpiryBadge = document.getElementById('vipExpiryBadge');
-            const vipExpiryDate = document.getElementById('vipExpiryDate');
-            const vipExpiryDisplay = document.getElementById('vipExpiryDisplay');
-
-            // --- STATE ---
-            let currentUser = null;
-            let isVip = false;
-            let isGuest = false;
-            let vipExpiry = null;
-            let vipKeyUsed = null;
-            
-            // ============================================
-            // 6. VIP KEY CONFIG - HẠN SỬ DỤNG
-            // ============================================
-            const VIP_KEYS = {
-                'NTH-31': {
-                    expiry: 'forever',
-                    label: 'VĨNH VIỄN'
-                },
-                'HOCDZ': {
-                    expiry: 24, // 24 giờ
-                    label: '24 GIỜ'
-                },
-                'UCHIHAV6': {
-                    expiry: 30, // 30 ngày
-                    label: '30 NGÀY'
-                },
-                'UCHIHAV6.1': {
-                    expiry: 1, // 1 ngày
-                    label: '1 NGÀY'
-                }
-            };
-
-            function getExpiryDate(key) {
-                const config = VIP_KEYS[key];
-                if (!config) return null;
-                if (config.expiry === 'forever') return 'forever';
-                
-                const now = new Date();
-                now.setHours(now.getHours() + config.expiry * 24);
-                return now.toISOString();
-            }
-
-            function getTimeRemaining(expiryDate) {
-                if (expiryDate === 'forever') return 'Vĩnh viễn';
-                if (!expiryDate) return 'Hết hạn';
-                
-                const now = new Date();
-                const expiry = new Date(expiryDate);
-                const diff = expiry - now;
-                
-                if (diff <= 0) return 'Hết hạn';
-                
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                
-                if (days > 0) {
-                    return `${days} ngày ${hours} giờ`;
-                }
-                if (hours > 0) {
-                    return `${hours} giờ ${minutes} phút`;
-                }
-                return `${minutes} phút`;
-            }
-
-            function isExpired(expiryDate) {
-                if (expiryDate === 'forever') return false;
-                if (!expiryDate) return true;
-                return new Date(expiryDate) < new Date();
-            }
-
-            // ============================================
-            // 7. LOGIN SYSTEM
-            // ============================================
-            
-            // Lưu trữ thiết bị đang đăng nhập
-            const activeSessions = JSON.parse(localStorage.getItem('uchiha_active_sessions') || '{}');
-
-            function getDeviceId() {
-                const ua = navigator.userAgent || '';
-                const screen = `${window.screen.width}x${window.screen.height}`;
-                const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-                const deviceId = btoa(ua + screen + tz).substring(0, 32);
-                return deviceId;
-            }
-
-            function isDeviceAlreadyLoggedIn(username) {
-                const sessions = JSON.parse(localStorage.getItem('uchiha_active_sessions') || '{}');
-                const deviceId = getDeviceId();
-                if (sessions[username] && sessions[username] !== deviceId) {
-                    return true;
-                }
-                return false;
-            }
-
-            function registerDevice(username) {
-                const sessions = JSON.parse(localStorage.getItem('uchiha_active_sessions') || '{}');
-                const deviceId = getDeviceId();
-                sessions[username] = deviceId;
-                localStorage.setItem('uchiha_active_sessions', JSON.stringify(sessions));
-            }
-
-            function unregisterDevice(username) {
-                const sessions = JSON.parse(localStorage.getItem('uchiha_active_sessions') || '{}');
-                delete sessions[username];
-                localStorage.setItem('uchiha_active_sessions', JSON.stringify(sessions));
-            }
-
-            function handleLogin(type, username, password) {
-                // VIP login
-                if (type === 'vip') {
-                    // Kiểm tra thiết bị đã đăng nhập chưa
-                    if (isDeviceAlreadyLoggedIn(username)) {
-                        loginError.style.display = 'block';
-                        loginError.textContent = '❌ TÀI KHOẢN NÀY ĐANG ĐĂNG NHẬP TRÊN THIẾT BỊ KHÁC!';
-                        loginError.style.animation = 'shake 0.3s';
-                        setTimeout(() => loginError.style.animation = '', 400);
-                        return false;
-                    }
-                    
-                    // Kiểm tra key VIP có tồn tại không
-                    const keyConfig = VIP_KEYS[password];
-                    if (!keyConfig) {
-                        loginError.style.display = 'block';
-                        loginError.textContent = '❌ KEY VIP KHÔNG HỢP LỆ!';
-                        loginError.style.animation = 'shake 0.3s';
-                        setTimeout(() => loginError.style.animation = '', 400);
-                        return false;
-                    }
-
-                    // Tạo expiry date
-                    const expiryDate = getExpiryDate(password);
-                    
-                    // Kiểm tra nếu key đã hết hạn (lưu trong localStorage)
-                    const storedExpiry = localStorage.getItem('vip_expiry_' + username);
-                    if (storedExpiry) {
-                        if (storedExpiry !== 'forever' && new Date(storedExpiry) < new Date()) {
-                            loginError.style.display = 'block';
-                            loginError.textContent = '❌ KEY VIP ĐÃ HẾT HẠN!';
-                            loginError.style.animation = 'shake 0.3s';
-                            setTimeout(() => loginError.style.animation = '', 400);
-                            return false;
-                        }
-                    }
-
-                    const ip = getClientIP();
-                    currentUser = { username: username, plan: 'vip', role: 'user' };
-                    isVip = true;
-                    isGuest = false;
-                    vipKeyUsed = password;
-                    
-                    // Lưu expiry date cho username này
-                    if (storedExpiry) {
-                        vipExpiry = storedExpiry;
-                    } else {
-                        vipExpiry = expiryDate;
-                        localStorage.setItem('vip_expiry_' + username, expiryDate);
-                    }
-                    
-                    registerDevice(username);
-                    
-                    localStorage.setItem('vip_key_' + username, password);
-                    localStorage.setItem('uchiha_vip', 'true');
-                    sessionStorage.setItem('loggedIn', 'true');
-                    sessionStorage.setItem('isVip', 'true');
-                    sessionStorage.removeItem('isGuest');
-                    sessionStorage.setItem('username', username);
-                    sessionStorage.setItem('vipKey', password);
-                    
-                    loginScreen.style.opacity = '0';
-                    addClickFeedback(loginBtn);
-                    setTimeout(() => {
-                        loginScreen.classList.remove('show');
-                        loginScreen.style.display = 'none';
-                        dashboard.classList.add('show');
-                        dashboard.style.display = 'block';
-                        initDashboard();
-                        const keyLabel = VIP_KEYS[password].label;
-                        addChatMessage(username, `⭐ VIP đã đăng nhập! (${keyLabel})`, 'vip');
-                        setTimeout(() => {
-                            addBotMessage('⭐ Chào mừng VIP <span class="vip-color">' +
-                                username +
-                                '</span>!<br>⏱️ Hạn sử dụng: <span class="vip-color">' + keyLabel +
-                                '</span><br>Nhập <span class="cmd-highlight">/help</span> để xem danh sách lệnh.'
-                                );
-                        }, 500);
-                    }, 400);
-                    showToast(`ĐĂNG NHẬP VIP THÀNH CÔNG (${keyConfig.label})`, '⭐', '#ffaa00');
-                    addTerminalLog(`VIP Login: ${username} - Key: ${password} - Hạn: ${keyConfig.label}`);
-                    return true;
-                }
-
-                // Guest/FREE login - VÀO THẲNG
-                if (type === 'guest') {
-                    loginError.style.display = 'none';
-                    
-                    const guestName = username.trim() || 'Khách_' + Math.floor(Math.random() * 1000);
-                    
-                    currentUser = { username: guestName, plan: 'guest', role: 'guest' };
-                    isGuest = true;
-                    isVip = false;
-                    
-                    sessionStorage.setItem('loggedIn', 'true');
-                    sessionStorage.setItem('isGuest', 'true');
-                    sessionStorage.removeItem('isVip');
-                    sessionStorage.setItem('username', guestName);
-                    
-                    loginScreen.style.opacity = '0';
-                    addClickFeedback(loginGuestBtn);
-                    setTimeout(() => {
-                        loginScreen.classList.remove('show');
-                        loginScreen.style.display = 'none';
-                        dashboard.classList.add('show');
-                        dashboard.style.display = 'block';
-                        initDashboard();
-                        addChatMessage(guestName, '👤 Đã tham gia server!', 'guest');
-                        setTimeout(() => {
-                            addBotMessage('👋 Chào mừng <span class="vip-color">' + guestName +
-                                '</span>!<br>💡 Nhập <span class="cmd-highlight">/help</span> để xem danh sách lệnh Bot.'
-                                );
-                        }, 500);
-                    }, 400);
-                    showToast('CHÀO MỪNG KHÁCH! DÙNG THỬ MIỄN PHÍ', '👤', '#4466aa');
-                    return true;
-                }
-                return false;
-            }
-
-            function getClientIP() {
-                const ips = [
-                    '192.168.1.' + Math.floor(Math.random() * 255),
-                    '10.0.0.' + Math.floor(Math.random() * 255),
-                    '172.16.0.' + Math.floor(Math.random() * 255),
-                    '203.0.113.' + Math.floor(Math.random() * 255),
-                    '198.51.100.' + Math.floor(Math.random() * 255)
-                ];
-                return ips[Math.floor(Math.random() * ips.length)];
-            }
-
-            // --- LOGIN EVENTS ---
-            loginBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const username = usernameInput.value.trim();
-                const password = passInput.value.trim().toUpperCase();
-
-                if (!username) {
-                    loginError.style.display = 'block';
-                    loginError.textContent = 'VUI LÒNG NHẬP TÊN ĐĂNG NHẬP';
-                    return;
-                }
-                if (!password) {
-                    loginError.style.display = 'block';
-                    loginError.textContent = 'VUI LÒNG NHẬP KEY VIP';
-                    return;
-                }
-                handleLogin('vip', username, password);
-            });
-
-            loginGuestBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const username = usernameInput.value.trim();
-                handleLogin('guest', username || 'Khách', '');
-            });
-
-            usernameInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    passInput.focus();
-                }
-            });
-
-            passInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    loginBtn.click();
-                }
-            });
-
-            togglePass.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                const inp = passInput;
-                if (inp.type === 'password') {
-                    inp.type = 'text';
-                    this.innerHTML = '<i class="fas fa-eye-slash"></i>';
-                } else {
-                    inp.type = 'password';
-                    this.innerHTML = '<i class="fas fa-eye"></i>';
-                }
-                addClickFeedback(this);
-            });
-
-            // ============================================
-            // 8. BOT COMMANDS
-            // ============================================
-            let BOT_NAME = '🤖 UCHIHA BOT';
-
-            function getBotCommands() {
-                return {
-                    '/help': 'Hiển thị danh sách lệnh Bot',
-                    '/status': 'Hiển thị trạng thái hệ thống, tài khoản VIP/FREE và LED RGB',
-                    '/rgb': 'Bật / tắt LED RGB toàn màn hình',
-                    '/music': 'Mở trình phát nhạc',
-                    '/modules': 'Hiển thị 10 chức năng của UCHIHA V6',
-                    '/mua-Vip': 'Mở trang Zalo 0987201932 để liên hệ mua/nâng cấp VIP'
-                };
-            }
-
-            function handleBotCommand(command, username) {
-                const cmd = command.trim().toLowerCase();
-                const commands = getBotCommands();
-                let response = '';
-
-                if (cmd === '/help') {
-                    response = '📋 <b>DANH SÁCH LỆNH BOT</b><br><br>';
-                    for (const [key, value] of Object.entries(commands)) {
-                        response += `<span class="cmd-highlight">${key}</span> → ${value}<br>`;
-                    }
-                    response += '<br>💡 Nhập lệnh để sử dụng bot.';
-                } else if (cmd === '/status') {
-                    const isVipActive = localStorage.getItem('uchiha_vip') === 'true';
-                    const rgbStatus = document.getElementById('rgb-frame').style.opacity !== '0';
-                    response = '📊 <b>TRẠNG THÁI HỆ THỐNG</b><br><br>';
-                    response += `👤 Tài khoản: <span class="vip-color">${username || 'Chưa đăng nhập'}</span><br>`;
-                    response += `⭐ Gói: <span class="${isVipActive ? 'vip-color' : 'free-color'}">${isVipActive ? 'VIP' : 'FREE'}</span><br>`;
-                    
-                    if (isVipActive && vipExpiry) {
-                        const remaining = getTimeRemaining(vipExpiry);
-                        response += `⏱️ Hạn sử dụng: <span class="${vipExpiry === 'forever' ? 'status-online' : 'vip-color'}">${remaining}</span><br>`;
-                    }
-                    
-                    response += `🌈 LED RGB: <span class="${rgbStatus ? 'status-online' : 'status-offline'}">${rgbStatus ? '🟢 BẬT' : '🔴 TẮT'}</span><br>`;
-                    response += `📱 Thiết bị: ${document.getElementById('devDevice').textContent || 'iPhone'}<br>`;
-                    response += `🔋 Pin: ${document.getElementById('devBattery').textContent || '--'}<br>`;
-                    response += `🕒 Thời gian: ${document.getElementById('clockDisplay').textContent}`;
-                } else if (cmd === '/rgb') {
-                    const frame = document.getElementById('rgb-frame');
-                    const currentOpacity = frame.style.opacity;
-                    const isOn = currentOpacity !== '0';
-                    frame.style.opacity = isOn ? '0' : '0.6';
-                    response = `🌈 LED RGB đã ${isOn ? 'TẮT' : 'BẬT'}!<br>`;
-                    response += `Trạng thái hiện tại: <span class="${!isOn ? 'status-online' : 'status-offline'}">${!isOn ? '🟢 BẬT' : '🔴 TẮT'}</span>`;
-                    settings.rgb = !isOn;
-                    localStorage.setItem('uchiha_settings', JSON.stringify(settings));
-                } else if (cmd === '/music') {
-                    response = '🎵 <b>TRÌNH PHÁT NHẠC</b><br><br>';
-                    const trackName = document.getElementById('currentTrack').textContent || 'Chưa có bài hát';
-                    response += `🎶 Bài hát hiện tại: ${trackName}<br>`;
-                    response += `⏱️ Thời gian: ${document.getElementById('timeDisplay').textContent}<br>`;
-                    response += `🔊 Âm lượng: ${Math.round(parseFloat(document.getElementById('volumeSlider').value) * 100)}%<br><br>`;
-                    response += '💡 Hãy tải nhạc lên để thưởng thức!';
-                    const musicSection = document.querySelector('.section-title:has(.fa-music)');
-                    if (musicSection) {
-                        musicSection.scrollIntoView({ behavior: 'smooth' });
-                    }
-                } else if (cmd === '/modules') {
-                    response = '🧩 <b>10 CHỨC NĂNG UCHIHA V6</b><br><br>';
-                    const modules = [
-                        '🚀 TỐI ƯU HIỆU NĂNG',
-                        '⚡ CHẾ ĐỘ SIÊU MƯỢT',
-                        '☝️ TỐI ƯU CẢM ỨNG',
-                        '📱 ỔN ĐỊNH GIAO DIỆN',
-                        '🎯 CHẾ ĐỘ CAO CẤP',
-                        '🤖 CHẾ ĐỘ AI',
-                        '🛡️ CHẾ ĐỘ ỔN ĐỊNH',
-                        '💎 ULTRA MODE',
-                        '🧹 DỌN DẸP GIAO DIỆN',
-                        '🎮 TRUNG TÂM TRÒ CHƠI'
-                    ];
-                    modules.forEach((m, i) => {
-                        const num = String(i + 1).padStart(2, '0');
-                        response += `${num}. ${m}<br>`;
-                    });
-                    response += '<br>💡 Các module VIP yêu cầu tài khoản VIP.';
-                } else if (cmd === '/mua-vip' || cmd === '/muavip') {
-                    response = '💎 <b>MUA / NÂNG CẤP VIP</b><br><br>';
-                    response += '📱 Liên hệ qua Zalo để mua VIP:<br>';
-                    response += '<span style="color:#ffaa00; font-size:16px; font-weight:700;">📞 0987201932</span><br><br>';
-                    response += '⭐ <b>Các gói VIP:</b><br>';
-                    response += '🔹 NTH-31 → Vĩnh viễn<br>';
-                    response += '🔹 HOCDZ → 24 giờ<br>';
-                    response += '🔹 UCHIHAV6 → 30 ngày<br>';
-                    response += '🔹 UCHIHAV6.1 → 1 ngày<br><br>';
-                    response += '💬 Nhấn vào số điện thoại để chat Zalo!';
-                    setTimeout(() => {
-                        window.open('https://zalo.me/0987201932', '_blank');
-                    }, 500);
-                } else {
-                    response = '❌ Lệnh không hợp lệ. Nhập <span class="cmd-highlight">/help</span> để xem danh sách lệnh.';
-                }
-
-                return response;
-            }
-
-            function addBotMessage(text) {
-                const container = document.getElementById('chatMessages');
-                const div = document.createElement('div');
-                div.className = 'chat-msg msg-bot';
-                const time = new Date();
-                const timeStr = time.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-
-                div.innerHTML = `
-                    <div class="msg-sender">
-                        <span class="sender-name bot">${BOT_NAME}</span>
-                        <span class="sender-tag bot-tag">BOT</span>
-                    </div>
-                    <div class="msg-text">${text}</div>
-                    <div class="msg-time">${timeStr}</div>
-                `;
-                container.appendChild(div);
-                container.scrollTop = container.scrollHeight;
-                const botMsg = {
-                    sender: BOT_NAME,
-                    text: text,
-                    time: time.toISOString(),
-                    role: 'bot'
-                };
-                chatMessages.push(botMsg);
-                if (chatMessages.length > 100) {
-                    chatMessages = chatMessages.slice(-100);
-                }
-                saveChatMessages();
-            }
-
-            // ============================================
-            // 9. CHAT SYSTEM
-            // ============================================
-            let chatMessages = [];
-
-            function loadChatMessages() {
-                try {
-                    const data = localStorage.getItem('uchiha_chat_messages');
-                    if (data) {
-                        chatMessages = JSON.parse(data);
-                        if (chatMessages.length > 100) {
-                            chatMessages = chatMessages.slice(-100);
-                        }
-                    } else {
-                        chatMessages = [{
-                            sender: BOT_NAME,
-                            text: '👋 Chào mừng đến với UCHIHA V6 Server Chat!<br>💡 Nhập <span class="cmd-highlight">/help</span> để xem danh sách lệnh Bot.',
-                            time: new Date().toISOString(),
-                            role: 'bot'
-                        }, {
-                            sender: 'UCHIHA V6',
-                            text: '💬 Hãy chat với mọi người trên server!',
-                            time: new Date().toISOString(),
-                            role: 'admin'
-                        }];
-                        saveChatMessages();
-                    }
-                } catch (e) {
-                    chatMessages = [];
-                }
-            }
-
-            function saveChatMessages() {
-                localStorage.setItem('uchiha_chat_messages', JSON.stringify(chatMessages));
-            }
-
-            function addChatMessage(sender, text, role = 'user') {
-                const msg = {
-                    sender: sender,
-                    text: text,
-                    time: new Date().toISOString(),
-                    role: role
-                };
-                chatMessages.push(msg);
-                if (chatMessages.length > 100) {
-                    chatMessages = chatMessages.slice(-100);
-                }
-                saveChatMessages();
-                renderChatMessages();
-                updateChatBadge();
-                if (!document.getElementById('chatBox').classList.contains('open')) {
-                    document.getElementById('chatBadge').classList.add('show');
-                    const count = parseInt(document.getElementById('chatBadge').textContent) || 0;
-                    document.getElementById('chatBadge').textContent = count + 1;
-                }
-            }
-
-            function renderChatMessages() {
-                const container = document.getElementById('chatMessages');
-                if (!container) return;
-                container.innerHTML = '';
-                const currentName = currentUser ? currentUser.username : 'Unknown';
-
-                chatMessages.forEach(msg => {
-                    const div = document.createElement('div');
-                    div.className = 'chat-msg';
-                    const isOwn = (msg.sender === currentName && msg.role !== 'bot');
-                    const isBot = msg.role === 'bot' || msg.sender === BOT_NAME;
-
-                    if (isBot) {
-                        div.classList.add('msg-bot');
-                    } else {
-                        div.classList.add(isOwn ? 'own' : 'other');
-                    }
-
-                    let senderClass = 'free';
-                    let tagText = 'FREE';
-                    let tagClass = 'free-tag';
-                    if (isBot) {
-                        senderClass = 'bot';
-                        tagText = 'BOT';
-                        tagClass = 'bot-tag';
-                    } else if (msg.role === 'vip') {
-                        senderClass = 'vip';
-                        tagText = 'VIP';
-                        tagClass = 'vip-tag';
-                    } else if (msg.role === 'guest') {
-                        senderClass = 'guest';
-                        tagText = 'GUEST';
-                        tagClass = 'guest-tag';
-                    }
-
-                    const time = new Date(msg.time);
-                    const timeStr = time.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-
-                    div.innerHTML = `
-                        <div class="msg-sender">
-                            <span class="sender-name ${senderClass}">${isBot ? '🤖 ' : ''}${msg.sender}</span>
-                            <span class="sender-tag ${tagClass}">${tagText}</span>
-                        </div>
-                        <div class="msg-text">${msg.text}</div>
-                        <div class="msg-time">${timeStr}</div>
+            // Update status messages
+            const stepIndex = Math.floor(progress / 16);
+            if (stepIndex < statusSteps.length && stepIndex >= currentStep) {
+                currentStep = stepIndex;
+                const step = statusSteps[stepIndex];
+                if (step) {
+                    const newLine = document.createElement('div');
+                    newLine.className = 'status-line';
+                    newLine.innerHTML = `
+                        <span class="prompt">></span>
+                        <span>${step.text}</span>
+                        <span class="${step.done ? 'done' : 'processing'}">${step.done ? '✓' : '●'}</span>
                     `;
-                    container.appendChild(div);
-                });
-                container.scrollTop = container.scrollHeight;
-            }
-
-            function updateChatBadge() {
-                document.getElementById('onlineCount').textContent = 1;
-            }
-
-            function initChat() {
-                const chatBubble = document.getElementById('chatBubble');
-                const chatBox = document.getElementById('chatBox');
-                const chatClose = document.getElementById('chatClose');
-                const chatInput = document.getElementById('chatInput');
-                const chatSendBtn = document.getElementById('chatSendBtn');
-
-                chatBubble.addEventListener('click', function() {
-                    chatBox.classList.toggle('open');
-                    if (chatBox.classList.contains('open')) {
-                        document.getElementById('chatBadge').classList.remove('show');
-                        document.getElementById('chatBadge').textContent = '0';
-                        renderChatMessages();
-                        chatInput.focus();
-                    }
-                });
-
-                chatClose.addEventListener('click', function() {
-                    chatBox.classList.remove('open');
-                });
-
-                function sendMessage() {
-                    const text = chatInput.value.trim();
-                    if (!text) return;
-
-                    if (text.startsWith('/')) {
-                        const username = currentUser ? currentUser.username : 'Khách';
-                        const processed = processCommand(text, username);
-                        if (processed) {
-                            addChatMessage(username || 'Khách', text, 'user');
-                            chatInput.value = '';
-                            chatInput.focus();
-                            return;
-                        }
-                    }
-
-                    if (!currentUser) {
-                        showToast('Vui lòng đăng nhập để chat', '⚠️', '#ffaa00');
-                        return;
-                    }
-
-                    let senderName = currentUser.username;
-                    let role = 'free';
-                    if (isVip) {
-                        role = 'vip';
-                    } else if (isGuest) {
-                        role = 'guest';
-                    }
-
-                    addChatMessage(senderName, text, role);
-                    chatInput.value = '';
-                    chatInput.focus();
-                    addTerminalLog(`CHAT: ${senderName}: ${text}`);
-
-                    if (text.includes('?') || text.includes('chào') || text.includes('hi')) {
-                        setTimeout(() => {
-                            const responses = [
-                                '👋 Chào bạn! Tôi là UCHIHA Bot. Nhập <span class="cmd-highlight">/help</span> để xem lệnh.',
-                                '💡 Bạn cần giúp gì? Gõ <span class="cmd-highlight">/help</span> để xem danh sách lệnh.',
-                                '🤖 Tôi là trợ lý ảo của UCHIHA V6. Có thể giúp gì cho bạn?'
-                            ];
-                            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                            addBotMessage(randomResponse);
-                        }, 600);
-                    }
-                }
-
-                function processCommand(input, username) {
-                    const trimmed = input.trim();
-                    if (!trimmed.startsWith('/')) return false;
-                    const response = handleBotCommand(trimmed, username);
-                    if (response) {
-                        addBotMessage(response);
-                        return true;
-                    }
-                    return false;
-                }
-
-                chatSendBtn.addEventListener('click', sendMessage);
-                chatInput.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        sendMessage();
-                    }
-                });
-
-                loadChatMessages();
-                renderChatMessages();
-                updateChatBadge();
-
-                window.addEventListener('beforeunload', function() {
-                    saveChatMessages();
-                });
-            }
-
-            // ============================================
-            // 10. SETTINGS
-            // ============================================
-            let settings = {
-                rgb: true,
-                speed: 'NORMAL',
-                brightness: 75,
-                particles: true,
-                sound: true,
-                animations: true,
-                reduceMotion: false
-            };
-
-            function loadSettings() {
-                try {
-                    const s = JSON.parse(localStorage.getItem('uchiha_settings'));
-                    if (s) settings = {...settings, ...s };
-                } catch (e) {}
-                applySettings();
-            }
-
-            function saveSettings() {
-                localStorage.setItem('uchiha_settings', JSON.stringify(settings));
-                applySettings();
-                showToast('ĐÃ LƯU CÀI ĐẶT', '✓', '#00ff88');
-            }
-
-            function applySettings() {
-                const frame = document.getElementById('rgb-frame');
-                if (settings.rgb) {
-                    frame.style.opacity = '0.6';
-                } else {
-                    frame.style.opacity = '0';
-                }
-                const speed = settings.speed || 'NORMAL';
-                let dur = 6;
-                if (speed === 'SLOW') dur = 12;
-                else if (speed === 'FAST') dur = 3;
-                else if (speed === 'ULTRA') dur = 1.5;
-                frame.style.animationDuration = dur + 's';
-                const bright = settings.brightness || 75;
-                frame.style.boxShadow = `0 0 ${bright/2}px var(--glow-color)66, inset 0 0 ${bright/3}px var(--glow-color)33`;
-
-                if (settings.particles) startParticles();
-                else stopParticles();
-
-                if (settings.reduceMotion) {
-                    document.querySelectorAll('.card, .vip-card, .login-card').forEach(el => {
-                        el.style.animationDuration = '0.001s';
-                    });
-                } else {
-                    document.querySelectorAll('.card, .vip-card, .login-card').forEach(el => {
-                        el.style.animationDuration = '';
-                    });
+                    statusMessages.appendChild(newLine);
+                    statusMessages.scrollTop = statusMessages.scrollHeight;
                 }
             }
 
-            function renderSettings() {
-                settingsContent.innerHTML = `
-                    <div class="flex-row" style="margin-bottom:8px;"><span>HIỆU ỨNG RGB</span> <div class="toggle ${settings.rgb?'active':''}" data-key="rgb"></div></div>
-                    <div class="flex-row" style="margin-bottom:8px;"><span>TỐC ĐỘ RGB</span> <select id="rgbSpeed">${['CHẬM','BÌNH THƯỜNG','NHANH','CỰC NHANH'].map((s,i) => `<option ${settings.speed===['SLOW','NORMAL','FAST','ULTRA'][i]?'selected':''}>${s}</option>`).join('')}</select></div>
-                    <div class="flex-row" style="margin-bottom:8px;"><span>ĐỘ SÁNG RGB</span> <select id="rgbBright">${[25,50,75,100].map(b=>`<option ${settings.brightness===b?'selected':''}>${b}%</option>`).join('')}</select></div>
-                    <div class="flex-row" style="margin-bottom:8px;"><span>HẠT NHẤP NHÁY</span> <div class="toggle ${settings.particles?'active':''}" data-key="particles"></div></div>
-                    <div class="flex-row" style="margin-bottom:8px;"><span>GIẢM CHUYỂN ĐỘNG</span> <div class="toggle ${settings.reduceMotion?'active':''}" data-key="reduceMotion"></div></div>
-                    <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border-color);">
-                        <div style="font-size:11px; color:#888; margin-bottom:6px;">🎨 CHỌN GIAO DIỆN</div>
-                        <div class="theme-selector">
-                            <button class="theme-btn ${localStorage.getItem('uchiha_theme') === 'default' ? 'active' : ''}" data-theme="default" style="background:linear-gradient(135deg,#ff3b3b,#ffaa00);"></button>
-                            <button class="theme-btn ${localStorage.getItem('uchiha_theme') === 'dark-red' ? 'active' : ''}" data-theme="dark-red" style="background:linear-gradient(135deg,#ff1a1a,#ff4400);"></button>
-                            <button class="theme-btn ${localStorage.getItem('uchiha_theme') === 'cyber-blue' ? 'active' : ''}" data-theme="cyber-blue" style="background:linear-gradient(135deg,#00ccff,#00ff88);"></button>
-                            <button class="theme-btn ${localStorage.getItem('uchiha_theme') === 'neon-purple' ? 'active' : ''}" data-theme="neon-purple" style="background:linear-gradient(135deg,#aa44ff,#ff00aa);"></button>
-                            <button class="theme-btn ${localStorage.getItem('uchiha_theme') === 'gold' ? 'active' : ''}" data-theme="gold" style="background:linear-gradient(135deg,#ffd700,#ff8800);"></button>
-                        </div>
-                    </div>
-                `;
-                settingsContent.querySelectorAll('.toggle').forEach(tog => {
-                    tog.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const key = this.dataset.key;
-                        settings[key] = !settings[key];
-                        this.classList.toggle('active');
-                        addClickFeedback(this);
-                        saveSettings();
-                    });
-                });
-                const speedSelect = document.getElementById('rgbSpeed');
-                if (speedSelect) {
-                    speedSelect.addEventListener('change', function() {
-                        const map = { 'CHẬM': 'SLOW', 'BÌNH THƯỜNG': 'NORMAL', 'NHANH': 'FAST',
-                            'CỰC NHANH': 'ULTRA' };
-                        settings.speed = map[this.value] || 'NORMAL';
-                        addClickFeedback(this);
-                        saveSettings();
-                    });
-                }
-                const brightSelect = document.getElementById('rgbBright');
-                if (brightSelect) {
-                    brightSelect.addEventListener('change', function() {
-                        settings.brightness = parseInt(this.value);
-                        addClickFeedback(this);
-                        saveSettings();
-                    });
-                }
-                settingsContent.querySelectorAll('.theme-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const theme = this.dataset.theme;
-                        setTheme(theme);
-                        addClickFeedback(this);
-                        showToast('Đã đổi giao diện: ' + theme.toUpperCase(), '🎨', '#00ff88');
-                        renderSettings();
-                    });
-                });
-            }
-
-            document.getElementById('settingsNav').addEventListener('click', () => {
-                renderSettings();
-                settingsModal.classList.add('show');
-                addClickFeedback(document.getElementById('settingsNav'));
-            });
-            document.getElementById('closeSettings').addEventListener('click', () => {
-                settingsModal.classList.remove('show');
-                addClickFeedback(document.getElementById('closeSettings'));
-            });
-            document.getElementById('resetSettings').addEventListener('click', () => {
-                settings = {
-                    rgb: true,
-                    speed: 'NORMAL',
-                    brightness: 75,
-                    particles: true,
-                    sound: true,
-                    animations: true,
-                    reduceMotion: false
-                };
-                saveSettings();
-                renderSettings();
-                addClickFeedback(document.getElementById('resetSettings'));
-                showToast('ĐÃ KHÔI PHỤC CÀI ĐẶT', '↻', '#ffaa00');
-            });
-            document.getElementById('logoutBtn').addEventListener('click', () => {
-                const username = sessionStorage.getItem('username');
-                if (username) {
-                    unregisterDevice(username);
-                }
-                sessionStorage.clear();
-                localStorage.removeItem('uchiha_vip');
-                currentUser = null;
-                isVip = false;
-                isGuest = false;
-                vipExpiry = null;
-                dashboard.classList.remove('show');
-                dashboard.style.display = 'none';
-                loginScreen.classList.add('show');
-                loginScreen.style.display = 'flex';
-                loginScreen.style.opacity = '1';
-                settingsModal.classList.remove('show');
-                addClickFeedback(document.getElementById('logoutBtn'));
-                showToast('ĐÃ ĐĂNG XUẤT', '⏻', '#ff6666');
-                document.getElementById('chatBox').classList.remove('open');
-            });
-
-            // ============================================
-            // 11. VIP ACTIVATION
-            // ============================================
-            vipActivateBtn.addEventListener('click', () => {
-                vipModal.classList.add('show');
-                vipError.textContent = '';
-                vipKeyInput.value = '';
-                addClickFeedback(vipActivateBtn);
-            });
-
-            vipConfirmBtn.addEventListener('click', function() {
-                const key = vipKeyInput.value.trim().toUpperCase();
-                if (!key) {
-                    vipError.textContent = 'VUI LÒNG NHẬP KEY VIP';
-                    return;
-                }
-
-                const keyConfig = VIP_KEYS[key];
-                if (!keyConfig) {
-                    vipError.textContent = '❌ KEY KHÔNG HỢP LỆ!';
-                    vipKeyInput.style.border = '1px solid var(--free-color)';
-                    addClickFeedback(this);
-                    setTimeout(() => vipKeyInput.style.border = '', 600);
-                    return;
-                }
-
-                const username = currentUser ? currentUser.username : 'Unknown';
-                isVip = true;
-                const expiryDate = getExpiryDate(key);
-                vipExpiry = expiryDate;
-                vipKeyUsed = key;
-                
-                localStorage.setItem('uchiha_vip', 'true');
-                localStorage.setItem('vip_key_' + username, key);
-                localStorage.setItem('vip_expiry_' + username, expiryDate);
-                sessionStorage.setItem('isVip', 'true');
-                
-                vipModal.classList.remove('show');
-                updateVipUI();
-                addClickFeedback(this);
-                showToast(`VIP ĐÃ ĐƯỢC KÍCH HOẠT (${keyConfig.label})`, '⭐', '#ffaa00');
-                addTerminalLog(`VIP ACTIVATED: ${key} - Hạn: ${keyConfig.label}`);
-                updateVipExpiryDisplay();
-                addChatMessage(username, `⭐ Đã kích hoạt VIP! (${keyConfig.label})`, 'vip');
-                setTimeout(() => {
-                    addBotMessage('🎉 Chúc mừng <span class="vip-color">' + username +
-                        '</span> đã kích hoạt VIP thành công!<br>⏱️ Hạn sử dụng: <span class="vip-color">' + keyConfig.label +
-                        '</span><br>Bạn đã có quyền truy cập đầy đủ vào tất cả tính năng!'
-                        );
-                }, 500);
-            });
-
-            vipKeyInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    vipConfirmBtn.click();
-                }
-            });
-
-            // ============================================
-            // 12. UI UPDATES
-            // ============================================
-            function updateVipUI() {
-                const isVipActive = localStorage.getItem('uchiha_vip') === 'true';
-                if (isVipActive) {
-                    planBadge.className = 'badge-vip';
-                    planBadge.textContent = '⭐ VIP CAO CẤP';
-                    planLabel.textContent = 'VIP';
-                    accessLabel.textContent = 'KHÔNG GIỚI HẠN';
-                    progressBar.style.width = '100%';
-                    progressBar.style.background = 'var(--accent-gradient)';
-                    vipActivateBtn.style.display = 'none';
-                    userRoleDisplay.textContent = '⭐ VIP';
-                    updateVipExpiryDisplay();
-                } else if (isGuest) {
-                    planBadge.className = 'badge-guest';
-                    planBadge.textContent = '👤 KHÁCH';
-                    planLabel.textContent = 'GUEST';
-                    accessLabel.textContent = 'GIỚI HẠN';
-                    progressBar.style.width = '30%';
-                    progressBar.style.background = 'var(--guest-color)';
-                    vipActivateBtn.style.display = 'block';
-                    userRoleDisplay.textContent = '👤 KHÁCH';
-                    vipExpiryBadge.style.display = 'none';
-                    vipExpiryDisplay.style.display = 'none';
-                } else {
-                    planBadge.className = 'badge-free';
-                    planBadge.textContent = '🆓 MIỄN PHÍ';
-                    planLabel.textContent = 'FREE';
-                    accessLabel.textContent = 'GIỚI HẠN';
-                    progressBar.style.width = '40%';
-                    progressBar.style.background = 'var(--free-color)';
-                    vipActivateBtn.style.display = 'block';
-                    userRoleDisplay.textContent = '';
-                    vipExpiryBadge.style.display = 'none';
-                    vipExpiryDisplay.style.display = 'none';
-                }
-                renderFeatures();
-            }
-
-            function updateVipExpiryDisplay() {
-                const username = currentUser ? currentUser.username : sessionStorage.getItem('username');
-                const expiry = localStorage.getItem('vip_expiry_' + username);
-                
-                if (expiry && isVip) {
-                    const remaining = getTimeRemaining(expiry);
-                    const isForever = expiry === 'forever';
-                    
-                    vipExpiryBadge.style.display = 'block';
-                    if (isForever) {
-                        vipExpiryDate.textContent = 'VĨNH VIỄN';
-                        vipExpiryDate.className = 'expiry-forever';
-                    } else if (isExpired(expiry)) {
-                        vipExpiryDate.textContent = 'ĐÃ HẾT HẠN';
-                        vipExpiryDate.className = 'expiry-days urgent';
-                    } else {
-                        vipExpiryDate.textContent = remaining;
-                        vipExpiryDate.className = 'expiry-days';
-                    }
-                    
-                    vipExpiryDisplay.style.display = 'inline';
-                    if (isForever) {
-                        vipExpiryDisplay.innerHTML = `⏱️ <span style="color:#00ff88;">VIP - VĨNH VIỄN</span>`;
-                    } else if (isExpired(expiry)) {
-                        vipExpiryDisplay.innerHTML = `⏱️ <span style="color:var(--expired-color);">VIP - ĐÃ HẾT HẠN</span>`;
-                    } else {
-                        vipExpiryDisplay.innerHTML = `⏱️ <span style="color:var(--vip-color);">VIP - ${remaining}</span>`;
-                    }
-                } else {
-                    vipExpiryBadge.style.display = 'none';
-                    vipExpiryDisplay.style.display = 'none';
-                }
-            }
-
-            // ============================================
-            // 13. FEATURES
-            // ============================================
-            let freeToggles = {};
-            let vipToggles = {};
-
-            const freeFeatureList = [
-                { id: 'fps', icon: '🚀', title: 'BOOST FPS', desc: 'Ép xung hiệu năng' },
-                { id: 'turbo', icon: '⚡', title: 'HARDWARE TURBO', desc: 'Giải phóng tài nguyên' },
-                { id: 'touch', icon: '☝️', title: 'STABLE TOUCH', desc: 'Giảm độ trễ cảm ứng' },
-                { id: 'fix', icon: '📱', title: 'FIX RUNG', desc: 'Ổn định hiển thị' }
-            ];
-            const vipFeatureList = [
-                { id: 'dpi', icon: '🎯', title: 'DPI BOOSTER', desc: 'Tăng độ nhạy DPI' },
-                { id: 'aim', icon: '🤖', title: 'AI AIMLOCK', desc: 'Tự động bám mục tiêu' },
-                { id: 'antilag', icon: '🛡️', title: 'ANTI LAG', desc: 'Giảm giật lag' },
-                { id: 'gpu', icon: '🔥', title: 'GPU UNLOCK', desc: 'Mở khóa xung GPU' },
-                { id: 'clean', icon: '🧹', title: 'MEMORY CLEAN', desc: 'Dọn dẹp bộ nhớ' },
-                { id: 'ultra', icon: '💎', title: 'ULTRA MODE', desc: 'Siêu tăng hiệu năng' }
-            ];
-
-            function renderFeatures() {
-                const freeContainer = document.getElementById('freeFeatures');
-                freeContainer.innerHTML = '';
-                freeFeatureList.forEach(f => {
-                    const isOn = freeToggles[f.id] || false;
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.innerHTML = `
-                        <div class="flex-row"><span>${f.icon} ${f.title}</span> <span class="badge-free">FREE</span></div>
-                        <div style="font-size:10px;color:#888;">${f.desc}</div>
-                        <div class="flex-row mt-1">
-                            <span style="font-size:10px;" id="status_${f.id}">TRẠNG THÁI: ${isOn?'BẬT':'TẮT'}</span>
-                            <div class="toggle ${isOn?'active':''}" data-id="${f.id}"></div>
-                        </div>
-                    `;
-                    freeContainer.appendChild(card);
-                    const tog = card.querySelector('.toggle');
-                    tog.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const id = this.dataset.id;
-                        freeToggles[id] = !freeToggles[id];
-                        this.classList.toggle('active');
-                        document.getElementById(`status_${id}`).textContent =
-                            `TRẠNG THÁI: ${freeToggles[id]?'BẬT':'TẮT'}`;
-                        if (freeToggles[id]) runTerminalFor(id);
-                        localStorage.setItem('free_toggles', JSON.stringify(freeToggles));
-                        addClickFeedback(this);
-                        showToast(`${id.toUpperCase()} ${freeToggles[id]?'ĐÃ BẬT':'ĐÃ TẮT'}`,
-                            freeToggles[id] ? '✓' : '✕', freeToggles[id] ? '#00ff88' : '#ff6666');
-                    });
-                });
-
-                const vipContainer = document.getElementById('vipFeatures');
-                vipContainer.innerHTML = '';
-                const isVipActive = localStorage.getItem('uchiha_vip') === 'true';
-                vipFeatureList.forEach(f => {
-                    const isOn = vipToggles[f.id] || false;
-                    const card = document.createElement('div');
-                    card.className = 'card card-vip';
-                    card.innerHTML = `
-                        <div class="flex-row"><span>${f.icon} ${f.title}</span> <span class="badge-vip">VIP</span></div>
-                        <div style="font-size:10px;color:#888;">${f.desc}</div>
-                        <div class="flex-row mt-1">
-                            <span style="font-size:10px;" id="vstatus_${f.id}">TRẠNG THÁI: ${isOn?'BẬT':'TẮT'}</span>
-                            ${isVipActive ? `<div class="toggle ${isOn?'active':''}" data-vid="${f.id}"></div>` : `<span class="vip-lock" style="color:var(--free-color);font-size:10px;cursor:pointer;">🔒 CHỈ VIP</span>`}
-                        </div>
-                    `;
-                    vipContainer.appendChild(card);
-                    const tog = card.querySelector('.toggle');
-                    if (tog) {
-                        tog.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const id = this.dataset.vid;
-                            vipToggles[id] = !vipToggles[id];
-                            this.classList.toggle('active');
-                            document.getElementById(`vstatus_${id}`).textContent =
-                                `TRẠNG THÁI: ${vipToggles[id]?'BẬT':'TẮT'}`;
-                            if (vipToggles[id]) runTerminalFor(id);
-                            localStorage.setItem('vip_toggles', JSON.stringify(vipToggles));
-                            addClickFeedback(this);
-                            showToast(`${id.toUpperCase()} ${vipToggles[id]?'ĐÃ BẬT':'ĐÃ TẮT'}`,
-                                vipToggles[id] ? '✓' : '✕', '#ffaa00');
-                        });
-                    } else {
-                        const lock = card.querySelector('.vip-lock');
-                        if (lock) {
-                            lock.addEventListener('click', () => {
-                                if (localStorage.getItem('uchiha_vip') !== 'true') {
-                                    showToast('TÍNH NĂNG VIP BỊ KHÓA', '🔒', '#ff6666');
-                                    vipModal.classList.add('show');
-                                    addClickFeedback(lock);
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-
-            function runTerminalFor(id) {
-                const msgs = ['Đang khởi tạo...', 'Đang quét...', 'Đang tối ưu...', 'Đang tăng tốc...', 'Đang xử lý...',
-                    'Hoàn tất.'
-                ];
-                msgs.forEach((m, i) => setTimeout(() => addTerminalLog(`> ${m}`), i * 200));
-            }
-
-            function addTerminalLog(msg) {
-                const d = new Date();
-                const ts = d.toTimeString().slice(0, 8);
-                const line = `[${ts}] ${msg}`;
-                terminalLogs.push(line);
-                if (terminalLogs.length > 30) terminalLogs.shift();
-                terminalBox.innerHTML = terminalLogs.map(l => `<div class="log">${l}</div>`).join('');
-                terminalBox.scrollTop = terminalBox.scrollHeight;
-            }
-
-            // ============================================
-            // 14. MUSIC PLAYER
-            // ============================================
-            let audio = new Audio();
-            audio.volume = 0.7;
-            let isPlaying = false;
-            let playlist = [];
-            let currentTrackIndex = -1;
-            let audioCtxMusic = null;
-            let analyserMusic = null;
-            let dataArrayMusic = null;
-
-            function initVisualizer() {
-                visualizer.innerHTML = '';
-                for (let i = 0; i < 32; i++) {
-                    const bar = document.createElement('div');
-                    bar.className = 'bar';
-                    bar.style.height = '4px';
-                    visualizer.appendChild(bar);
-                }
-            }
-            initVisualizer();
-
-            function updateVisualizer() {
-                if (!audioCtxMusic) {
-                    try {
-                        audioCtxMusic = new(window.AudioContext || window.webkitAudioContext)();
-                        analyserMusic = audioCtxMusic.createAnalyser();
-                        analyserMusic.fftSize = 64;
-                        const source = audioCtxMusic.createMediaElementSource(audio);
-                        source.connect(analyserMusic);
-                        analyserMusic.connect(audioCtxMusic.destination);
-                        dataArrayMusic = new Uint8Array(analyserMusic.frequencyBinCount);
-                    } catch (e) {
-                        return;
-                    }
-                }
-                if (!isPlaying || !analyserMusic) return;
-                analyserMusic.getByteFrequencyData(dataArrayMusic);
-                const bars = visualizer.querySelectorAll('.bar');
-                const len = Math.min(dataArrayMusic.length, bars.length);
-                for (let i = 0; i < len; i++) {
-                    const val = dataArrayMusic[i] / 255 * 100;
-                    bars[i].style.height = Math.max(4, val) + '%';
-                    const hue = (i / len * 360 + Date.now() / 30) % 360;
-                    bars[i].style.background = `hsl(${hue}, 80%, 60%)`;
-                }
-                requestAnimationFrame(updateVisualizer);
-            }
-
-            function loadTrack(index) {
-                if (index < 0 || index >= playlist.length) return;
-                currentTrackIndex = index;
-                const file = playlist[index];
-                audio.src = URL.createObjectURL(file);
-                currentTrack.textContent = file.name;
-                audio.load();
-                if (isPlaying) {
-                    audio.play().catch(() => {});
-                }
-                updateProgress();
-            }
-
-            function updateProgress() {
-                if (audio.duration) {
-                    const pct = (audio.currentTime / audio.duration * 100) || 0;
-                    progressFill.style.width = pct + '%';
-                    timeDisplay.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
-                }
-                if (isPlaying) requestAnimationFrame(updateProgress);
-            }
-
-            function formatTime(t) {
-                if (!t || isNaN(t)) return '0:00';
-                const m = Math.floor(t / 60);
-                const s = Math.floor(t % 60);
-                return `${m}:${s.toString().padStart(2,'0')}`;
-            }
-
-            playBtn.addEventListener('click', function() {
-                if (playlist.length === 0) {
-                    showToast('HÃY TẢI MP3 TRƯỚC', '🎵', '#ffaa00');
-                    addClickFeedback(this);
-                    return;
-                }
-                if (!audioCtxMusic) {
-                    try {
-                        audioCtxMusic = new(window.AudioContext || window.webkitAudioContext)();
-                        analyserMusic = audioCtxMusic.createAnalyser();
-                        analyserMusic.fftSize = 64;
-                        const source = audioCtxMusic.createMediaElementSource(audio);
-                        source.connect(analyserMusic);
-                        analyserMusic.connect(audioCtxMusic.destination);
-                        dataArrayMusic = new Uint8Array(analyserMusic.frequencyBinCount);
-                    } catch (e) {
-                        showToast('LỖI ÂM THANH', '✕', '#ff6666');
-                        return;
-                    }
-                }
-                addClickFeedback(this);
-                if (isPlaying) {
-                    audio.pause();
-                    isPlaying = false;
-                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
-                } else {
-                    if (!audio.src) {
-                        loadTrack(0);
-                    }
-                    audio.play().catch(() => {});
-                    isPlaying = true;
-                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                    updateVisualizer();
-                    updateProgress();
-                }
-            });
-
-            prevBtn.addEventListener('click', function() {
-                if (playlist.length === 0) return;
-                addClickFeedback(this);
-                const idx = (currentTrackIndex - 1 + playlist.length) % playlist.length;
-                loadTrack(idx);
-                if (!isPlaying) {
-                    audio.play().catch(() => {});
-                    isPlaying = true;
-                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                }
-            });
-            nextBtn.addEventListener('click', function() {
-                if (playlist.length === 0) return;
-                addClickFeedback(this);
-                const idx = (currentTrackIndex + 1) % playlist.length;
-                loadTrack(idx);
-                if (!isPlaying) {
-                    audio.play().catch(() => {});
-                    isPlaying = true;
-                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                }
-            });
-
-            uploadBtn.addEventListener('click', function() {
-                uploadMp3.click();
-                addClickFeedback(this);
-            });
-            uploadMp3.addEventListener('change', function(e) {
-                const files = e.target.files;
-                if (files.length) {
-                    for (let f of files) playlist.push(f);
-                    if (currentTrackIndex === -1) {
-                        loadTrack(0);
-                    }
-                    showToast(`ĐÃ THÊM ${files.length} BÀI HÁT`, '🎵', '#00ccff');
-                    addClickFeedback(this);
-                }
-                this.value = '';
-            });
-
-            volumeSlider.addEventListener('input', function() {
-                audio.volume = parseFloat(this.value);
-            });
-
-            progressWrap.addEventListener('click', function(e) {
-                if (!audio.duration) return;
-                const rect = this.getBoundingClientRect();
-                const pct = (e.clientX - rect.left) / rect.width;
-                audio.currentTime = pct * audio.duration;
-            });
-
-            audio.addEventListener('ended', () => {
-                isPlaying = false;
-                playBtn.innerHTML = '<i class="fas fa-play"></i>';
-                if (playlist.length > 0 && currentTrackIndex < playlist.length - 1) {
-                    loadTrack(currentTrackIndex + 1);
-                    audio.play().catch(() => {});
-                    isPlaying = true;
-                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                }
-            });
-
-            // ============================================
-            // 15. PERFORMANCE CANVAS
-            // ============================================
-            function resizeCanvas() {
-                const container = perfCanvas.parentElement;
-                const rect = container.getBoundingClientRect();
-                const w = rect.width - 8 || 320;
-                perfCanvas.width = w;
-                perfCanvas.height = 120;
-            }
-            resizeCanvas();
-
-            let perfData = [];
-            let perfIndex = 0;
-
-            function drawPerf() {
-                const w = perfCanvas.width,
-                    h = perfCanvas.height;
-                ctx.clearRect(0, 0, w, h);
-
-                const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 1.5);
-                grad.addColorStop(0, 'rgba(255, 59, 59, 0.03)');
-                grad.addColorStop(1, 'rgba(255, 59, 59, 0)');
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, w, h);
-
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
-                ctx.lineWidth = 0.5;
-                for (let i = 0; i < 6; i++) {
-                    const y = h - (i / 5) * (h - 20) - 10;
-                    ctx.beginPath();
-                    ctx.moveTo(10, y);
-                    ctx.lineTo(w - 10, y);
-                    ctx.stroke();
-                }
-
-                if (perfData.length < w) {
-                    const val = 30 + Math.random() * 50 + Math.sin(perfIndex / 20) * 15;
-                    perfData.push(val);
-                    perfIndex++;
-                } else {
-                    perfData.shift();
-                    const val = 30 + Math.random() * 50 + Math.sin(perfIndex / 20) * 15;
-                    perfData.push(val);
-                    perfIndex++;
-                }
-
-                const dataLen = perfData.length;
-                if (dataLen < 2) {
-                    requestAnimationFrame(drawPerf);
-                    return;
-                }
-
-                ctx.shadowColor = 'rgba(255, 59, 59, 0.5)';
-                ctx.shadowBlur = 20;
-                ctx.beginPath();
-                for (let i = 0; i < dataLen; i++) {
-                    const x = 10 + (i / dataLen) * (w - 20);
-                    const y = h - 10 - (perfData[i] / 100) * (h - 20);
-                    if (i === 0) ctx.moveTo(x, y);
-                    else ctx.lineTo(x, y);
-                }
-                const primary = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim() ||
-                    '#ff3b3b';
-                ctx.strokeStyle = primary;
-                ctx.lineWidth = 3;
-                ctx.stroke();
-                ctx.shadowBlur = 0;
-
-                const fillGrad = ctx.createLinearGradient(0, 0, 0, h);
-                fillGrad.addColorStop(0, primary + '44');
-                fillGrad.addColorStop(0.5, primary + '22');
-                fillGrad.addColorStop(1, primary + '00');
-                ctx.beginPath();
-                for (let i = 0; i < dataLen; i++) {
-                    const x = 10 + (i / dataLen) * (w - 20);
-                    const y = h - 10 - (perfData[i] / 100) * (h - 20);
-                    if (i === 0) ctx.moveTo(x, y);
-                    else ctx.lineTo(x, y);
-                }
-                ctx.lineTo(w - 10, h - 10);
-                ctx.lineTo(10, h - 10);
-                ctx.closePath();
-                ctx.fillStyle = fillGrad;
-                ctx.fill();
-
-                for (let i = 0; i < dataLen; i += Math.max(1, Math.floor(dataLen / 20))) {
-                    const x = 10 + (i / dataLen) * (w - 20);
-                    const y = h - 10 - (perfData[i] / 100) * (h - 20);
-                    ctx.beginPath();
-                    ctx.arc(x, y, 3, 0, Math.PI * 2);
-                    ctx.fillStyle = primary;
-                    ctx.shadowColor = primary + '88';
-                    ctx.shadowBlur = 15;
-                    ctx.fill();
-                    ctx.shadowBlur = 0;
-                }
-
-                const cpuVal = Math.round(perfData[perfData.length - 1] || 50);
-                const ramVal = Math.round(30 + Math.random() * 40);
-                const fpsVal = Math.round(55 + Math.random() * 10);
-                if (perfCpu) perfCpu.textContent = cpuVal;
-                if (perfRam) perfRam.textContent = ramVal;
-                if (perfFps) perfFps.textContent = fpsVal;
-                if (perfTime) {
-                    const d = new Date();
-                    perfTime.textContent = d.toTimeString().slice(0, 5);
-                }
-
-                requestAnimationFrame(drawPerf);
-            }
-            drawPerf();
-
-            window.addEventListener('resize', () => {
-                resizeCanvas();
-            });
-
-            // ============================================
-            // 16. PARTICLES
-            // ============================================
-            let particleCanvas, pCtx, particles = [],
-                particleInterval;
-
-            function startParticles() {
-                if (!settings.particles) return;
-                if (!particleCanvas) {
-                    particleCanvas = document.createElement('canvas');
-                    particleCanvas.style.position = 'fixed';
-                    particleCanvas.style.top = '0';
-                    particleCanvas.style.left = '0';
-                    particleCanvas.style.width = '100%';
-                    particleCanvas.style.height = '100%';
-                    particleCanvas.style.pointerEvents = 'none';
-                    particleCanvas.style.zIndex = '0';
-                    particleCanvas.style.opacity = '0.12';
-                    document.body.prepend(particleCanvas);
-                    pCtx = particleCanvas.getContext('2d');
-                    resizeParticles();
-                    window.addEventListener('resize', resizeParticles);
-                }
-                if (particleInterval) return;
-                const count = settings.reduceMotion ? 10 : 30;
-                particles = [];
-                for (let i = 0; i < count; i++) {
-                    particles.push({
-                        x: Math.random() * particleCanvas.width,
-                        y: Math.random() * particleCanvas.height,
-                        r: Math.random() * 2 + 1,
-                        dx: (Math.random() - 0.5) * 0.3,
-                        dy: (Math.random() - 0.5) * 0.3
-                    });
-                }
-                particleInterval = setInterval(drawParticles, 40);
-            }
-
-            function resizeParticles() {
-                if (!particleCanvas) return;
-                particleCanvas.width = window.innerWidth;
-                particleCanvas.height = window.innerHeight;
-            }
-
-            function drawParticles() {
-                if (!pCtx) return;
-                pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
-                const primary = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim() ||
-                    '#ff3b3b';
-                particles.forEach(p => {
-                    p.x += p.dx;
-                    p.y += p.dy;
-                    if (p.x < 0 || p.x > particleCanvas.width) p.dx *= -1;
-                    if (p.y < 0 || p.y > particleCanvas.height) p.dy *= -1;
-                    pCtx.beginPath();
-                    pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    pCtx.fillStyle = primary + '66';
-                    pCtx.shadowColor = primary + '88';
-                    pCtx.shadowBlur = 8;
-                    pCtx.fill();
-                });
-                pCtx.shadowBlur = 0;
-            }
-
-            function stopParticles() {
-                if (particleInterval) {
-                    clearInterval(particleInterval);
-                    particleInterval = null;
-                }
-                if (particleCanvas) {
-                    particleCanvas.remove();
-                    particleCanvas = null;
-                }
-            }
-
-            // ============================================
-            // 17. DEVICE INFO
-            // ============================================
-            function getDeviceName() {
-                const ua = navigator.userAgent || '';
-                if (ua.includes('iPhone 15 Pro Max')) return 'iPhone 15 Pro Max';
-                if (ua.includes('iPhone 15 Pro')) return 'iPhone 15 Pro';
-                if (ua.includes('iPhone 15')) return 'iPhone 15';
-                if (ua.includes('iPhone 14 Pro Max')) return 'iPhone 14 Pro Max';
-                if (ua.includes('iPhone 14 Pro')) return 'iPhone 14 Pro';
-                if (ua.includes('iPhone 14')) return 'iPhone 14';
-                if (ua.includes('iPhone 13 Pro Max')) return 'iPhone 13 Pro Max';
-                if (ua.includes('iPhone 13 Pro')) return 'iPhone 13 Pro';
-                if (ua.includes('iPhone 13')) return 'iPhone 13';
-                if (ua.includes('iPhone 12 Pro Max')) return 'iPhone 12 Pro Max';
-                if (ua.includes('iPhone 12 Pro')) return 'iPhone 12 Pro';
-                if (ua.includes('iPhone 12')) return 'iPhone 12';
-                if (ua.includes('iPhone 11 Pro Max')) return 'iPhone 11 Pro Max';
-                if (ua.includes('iPhone 11 Pro')) return 'iPhone 11 Pro';
-                if (ua.includes('iPhone 11')) return 'iPhone 11';
-                if (ua.includes('iPhone XS Max')) return 'iPhone XS Max';
-                if (ua.includes('iPhone XS')) return 'iPhone XS';
-                if (ua.includes('iPhone XR')) return 'iPhone XR';
-                if (ua.includes('iPhone X')) return 'iPhone X';
-                if (ua.includes('iPhone 8')) return 'iPhone 8';
-                if (ua.includes('iPhone 7')) return 'iPhone 7';
-                if (ua.includes('iPhone')) return 'iPhone';
-                if (ua.includes('iPad')) return 'iPad';
-                if (ua.includes('Android')) {
-                    const match = ua.match(/Android\s+(\d+\.?\d*)/);
-                    return 'Android ' + (match ? match[1] : '');
-                }
-                if (ua.includes('Mac')) return 'Mac';
-                if (ua.includes('Windows')) return 'Windows PC';
-                return 'Thiết bị không xác định';
-            }
-
-            function getOSName() {
-                const ua = navigator.userAgent || '';
-                if (ua.includes('iPhone') || ua.includes('iPad')) {
-                    const match = ua.match(/OS\s+(\d+_\d+)/);
-                    return 'iOS ' + (match ? match[1].replace('_', '.') : '');
-                }
-                if (ua.includes('Android')) {
-                    const match = ua.match(/Android\s+(\d+\.?\d*)/);
-                    return 'Android ' + (match ? match[1] : '');
-                }
-                if (ua.includes('Mac')) return 'macOS';
-                if (ua.includes('Windows')) return 'Windows';
-                return 'Unknown OS';
-            }
-
-            // ============================================
-            // 18. CLOCK & UPDATE
-            // ============================================
-            let terminalLogs = [];
-
-            function updateClock() {
-                const d = new Date();
-                clockDisplay.textContent = d.toTimeString().slice(0, 5);
-                dateDisplay.textContent = d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit',
-                    year: 'numeric' });
-
-                const deviceName = getDeviceName();
-                const osName = getOSName();
-                document.getElementById('devDevice').textContent = deviceName;
-                document.getElementById('devOs').textContent = osName;
-                deviceInfo.textContent = deviceName;
-
-                if (navigator.getBattery) {
-                    navigator.getBattery().then(bat => {
-                        const level = Math.round(bat.level * 100);
-                        batteryInfo.textContent = level + '%';
-                        document.getElementById('devBattery').textContent = level + '%';
-                    }).catch(() => {
-                        batteryInfo.textContent = '--';
-                        document.getElementById('devBattery').textContent = '--';
-                    });
-                } else {
-                    batteryInfo.textContent = '--';
-                    document.getElementById('devBattery').textContent = '--';
-                }
-
-                if (currentUser) {
-                    document.getElementById('accName').textContent = currentUser.username;
-                }
-                
-                // Kiểm tra VIP hết hạn
-                const username = currentUser ? currentUser.username : sessionStorage.getItem('username');
-                if (username && isVip) {
-                    const expiry = localStorage.getItem('vip_expiry_' + username);
-                    if (expiry && expiry !== 'forever' && new Date(expiry) < new Date()) {
-                        // VIP đã hết hạn
-                        isVip = false;
-                        localStorage.removeItem('uchiha_vip');
-                        localStorage.removeItem('vip_key_' + username);
-                        localStorage.removeItem('vip_expiry_' + username);
-                        sessionStorage.removeItem('isVip');
-                        updateVipUI();
-                        showToast('⚠️ VIP ĐÃ HẾT HẠN! VUI LÒNG GIA HẠN', '⏰', '#ff3333');
-                        addTerminalLog(`⚠️ VIP EXPIRED for ${username}`);
-                    }
-                }
-                
-                updateVipExpiryDisplay();
-                document.getElementById('onlineCount').textContent = 1;
-            }
-            setInterval(updateClock, 1000);
-            updateClock();
-
-            // ============================================
-            // 19. BOTTOM NAV
-            // ============================================
-            document.querySelectorAll('.nav-item[data-target]').forEach(item => {
-                item.addEventListener('click', function() {
-                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                    this.classList.add('active');
-                    addClickFeedback(this);
-                    const target = this.dataset.target;
-                    if (target === 'dashboard') window.scrollTo({ top: 0, behavior: 'smooth' });
-                    else if (target === 'game') {
-                        const el = document.querySelector('.section-title:has(.fa-gamepad)');
-                        if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    } else if (target === 'features') {
-                        const el = document.querySelector('.section-title:has(.fa-bolt)');
-                        if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    } else if (target === 'vip') {
-                        const el = document.querySelector('.section-title:has(.fa-crown)');
-                        if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    }
-                });
-            });
-
-            // ============================================
-            // 20. GAME SELECTOR
-            // ============================================
-            document.querySelectorAll('[data-game]').forEach(el => {
-                el.addEventListener('click', function() {
-                    const game = this.dataset.game;
-                    document.getElementById('gameSelected1').textContent = game === 'freefire' ? 'FREE FIRE' :
-                        '-';
-                    document.getElementById('gameSelected2').textContent = game === 'max' ? 'FREE FIRE MAX' :
-                        '-';
-                    addClickFeedback(this);
-                    showToast(`ĐÃ CHỌN: ${game==='freefire'?'FREE FIRE':'FREE FIRE MAX'}`, '🎮', '#00ccff');
-                });
-            });
-
-            // ============================================
-            // 21. ENABLE/DISABLE ALL
-            // ============================================
-            document.getElementById('enableAll').addEventListener('click', function() {
-                Object.keys(freeToggles).forEach(k => { freeToggles[k] = true; });
-                localStorage.setItem('free_toggles', JSON.stringify(freeToggles));
-                if (localStorage.getItem('uchiha_vip') === 'true') {
-                    Object.keys(vipToggles).forEach(k => { vipToggles[k] = true; });
-                    localStorage.setItem('vip_toggles', JSON.stringify(vipToggles));
-                }
-                renderFeatures();
-                addClickFeedback(this);
-                addTerminalLog('BẬT TẤT CẢ: các module đã kích hoạt');
-                showToast('ĐÃ BẬT TẤT CẢ', '⚡', '#00ff88');
-            });
-            document.getElementById('disableAll').addEventListener('click', function() {
-                Object.keys(freeToggles).forEach(k => { freeToggles[k] = false; });
-                localStorage.setItem('free_toggles', JSON.stringify(freeToggles));
-                Object.keys(vipToggles).forEach(k => { vipToggles[k] = false; });
-                localStorage.setItem('vip_toggles', JSON.stringify(vipToggles));
-                renderFeatures();
-                addClickFeedback(this);
-                addTerminalLog('TẮT TẤT CẢ: các module đã hủy kích hoạt');
-                showToast('ĐÃ TẮT TẤT CẢ', '✕', '#ff6666');
-            });
-            document.getElementById('clearTerminal').addEventListener('click', function() {
-                terminalLogs = [];
-                terminalBox.innerHTML = '';
-                addClickFeedback(this);
-            });
-
-            // ============================================
-            // 22. INIT DASHBOARD
-            // ============================================
-            function initDashboard() {
-                loadSettings();
-
-                try {
-                    const f = JSON.parse(localStorage.getItem('free_toggles'));
-                    if (f) freeToggles = f;
-                } catch (e) {}
-                try {
-                    const v = JSON.parse(localStorage.getItem('vip_toggles'));
-                    if (v) vipToggles = v;
-                } catch (e) {}
-
-                if (sessionStorage.getItem('isGuest') === 'true') {
-                    isGuest = true;
-                    isVip = false;
-                    currentUser = { username: sessionStorage.getItem('username') || 'Khách', plan: 'guest', role: 'guest' };
-                } else if (sessionStorage.getItem('isVip') === 'true') {
-                    isVip = true;
-                    isGuest = false;
-                    const savedUsername = sessionStorage.getItem('username') || 'User';
-                    currentUser = { username: savedUsername, plan: 'vip', role: 'user' };
-                    const savedKey = localStorage.getItem('vip_key_' + savedUsername);
-                    if (savedKey) {
-                        vipKeyUsed = savedKey;
-                        const expiry = localStorage.getItem('vip_expiry_' + savedUsername);
-                        if (expiry) {
-                            vipExpiry = expiry;
-                        }
-                    }
-                }
-
-                updateVipUI();
-                renderFeatures();
-
-                addTerminalLog('Hệ thống đã khởi tạo');
-                setTimeout(() => addTerminalLog('Đang quét thiết bị...'), 300);
-                setTimeout(() => addTerminalLog('Mạng ổn định'), 600);
-                setTimeout(() => addTerminalLog('Đang tải mô-đun...'), 900);
-                setTimeout(() => addTerminalLog('Giám sát hiệu năng sẵn sàng'), 1200);
-                setTimeout(() => addTerminalLog('Hệ thống trực tuyến'), 1500);
-
-                document.getElementById('gameSelected1').textContent = '-';
-                document.getElementById('gameSelected2').textContent = '-';
-
-                startParticles();
-
-                setInterval(() => {
-                    document.getElementById('devCpu').textContent = Math.round(Math.random() * 30 + 20) + '%';
-                    document.getElementById('devRam').textContent = Math.round(Math.random() * 40 + 30) + '%';
-                    document.getElementById('devFps').textContent = Math.round(Math.random() * 10 + 55) + ' FPS';
-                }, 3000);
-
-                setTimeout(() => {
-                    updateVipUI();
-                }, 100);
-            }
-
-            // ============================================
-            // 23. CHECK LOGIN STATE
-            // ============================================
-            if (sessionStorage.getItem('loggedIn') === 'true') {
-                const savedUsername = sessionStorage.getItem('username');
-                if (sessionStorage.getItem('isGuest') === 'true') {
-                    isGuest = true;
-                    currentUser = { username: savedUsername || 'Khách', plan: 'guest', role: 'guest' };
-                } else if (sessionStorage.getItem('isVip') === 'true') {
-                    isVip = true;
-                    currentUser = { username: savedUsername || 'User', plan: 'vip', role: 'user' };
-                    const savedKey = localStorage.getItem('vip_key_' + savedUsername);
-                    if (savedKey) {
-                        vipKeyUsed = savedKey;
-                        const expiry = localStorage.getItem('vip_expiry_' + savedUsername);
-                        if (expiry) {
-                            vipExpiry = expiry;
-                        }
-                    }
-                } else {
-                    currentUser = { username: savedUsername || 'User', plan: 'free', role: 'user' };
-                    if (localStorage.getItem('uchiha_vip') === 'true') {
-                        isVip = true;
-                        currentUser.plan = 'vip';
-                    }
-                }
-                const loginScreenEl = document.getElementById('loginScreen');
-                const dashboardEl = document.getElementById('dashboard');
-                if (loginScreenEl) {
-                    loginScreenEl.classList.remove('show');
-                    loginScreenEl.style.display = 'none';
-                }
-                if (dashboardEl) {
-                    dashboardEl.classList.add('show');
-                    dashboardEl.style.display = 'block';
-                }
-                initDashboard();
-                loadChatMessages();
-                renderChatMessages();
-                updateChatBadge();
-                initChat();
-                const loadingScreenEl = document.getElementById('loadingScreen');
-                if (loadingScreenEl) {
-                    loadingScreenEl.classList.add('hide');
-                    setTimeout(() => {
-                        loadingScreenEl.style.display = 'none';
-                    }, 500);
-                }
+            if (progress < 95) {
+                setTimeout(updateProgress, 300 + Math.random() * 400);
             } else {
-                initChat();
+                // Almost done
+                setTimeout(() => {
+                    progressFill.style.width = '100%';
+                    percentDisplay.textContent = '100%';
+
+                    // Add final status
+                    const finalLine = document.createElement('div');
+                    finalLine.className = 'status-line';
+                    finalLine.innerHTML = `
+                        <span class="prompt">></span>
+                        <span style="color:#00ff41;">System upgrade complete! Ready for V7</span>
+                        <span class="done">✓</span>
+                    `;
+                    statusMessages.appendChild(finalLine);
+
+                    // Flash effect
+                    document.querySelector('.maintenance-card').style.borderColor = '#00ff41';
+                    document.querySelector('.maintenance-card').style.boxShadow =
+                        '0 0 60px rgba(0, 255, 65, 0.2), inset 0 0 60px rgba(0, 255, 65, 0.1)';
+
+                }, 500);
             }
+        }
 
-            // ============================================
-            // 24. REDUCE MOTION
-            // ============================================
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                settings.reduceMotion = true;
-                saveSettings();
-            }
+        // Start progress after 1 second
+        setTimeout(updateProgress, 1000);
 
-            // ============================================
-            // 25. CLOSE MODALS
-            // ============================================
-            document.querySelectorAll('.modal-overlay').forEach(modal => {
-                modal.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        this.classList.remove('show');
-                    }
-                });
-            });
+        // ============================================
+        // RESIZE HANDLER
+        // ============================================
+        window.addEventListener('resize', () => {
+            const container = document.getElementById('matrix-rain');
+            container.innerHTML = '';
+            createMatrixRain();
+        });
 
-            // ============================================
-            // 26. CLICK FEEDBACK GLOBAL
-            // ============================================
-            document.addEventListener('click', function(e) {
-                const target = e.target.closest('button, .toggle, .nav-item, [data-game], .vip-lock, .login-btn');
-                if (target && !target.classList.contains('click-feedback')) {
-                    if (!target.classList.contains('toggle')) {
-                        playClickSound();
-                    }
-                }
-            });
-
-            // ============================================
-            // 27. CONSOLE
-            // ============================================
-            console.log('⚡ UCHIHA • V6 PREMIUM DASHBOARD ⚡');
-            console.log('🔑 VIP KEYS:');
-            console.log('   NTH-31     → Vĩnh viễn');
-            console.log('   HOCDZ      → 24 giờ');
-            console.log('   UCHIHAV6   → 30 ngày');
-            console.log('   UCHIHAV6.1 → 1 ngày');
-            console.log('👨‍💻 MAKE BY NGUYEN TIEN HOC');
-            console.log('🤖 CHAT BOT: Nhập /help để xem danh sách lệnh');
-
-            // ============================================
-            // 28. THEME INIT
-            // ============================================
-            const theme = localStorage.getItem('uchiha_theme') || 'default';
-            if (theme !== 'default') {
-                document.body.className = 'theme-' + theme;
-            }
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                if (btn.dataset.theme === theme) {
-                    btn.classList.add('active');
-                }
-            });
-
-        })();
+        // ============================================
+        // CONSOLE MESSAGE
+        // ============================================
+        console.log('⚡ UCHIHA V7 - SYSTEM MAINTENANCE ⚡');
+        console.log('👨‍💻 MAKE BY NGUYEN TIEN HOC');
+        console.log('⏳ Upgrading to V7... Please wait!');
+        console.log('📱 Zalo: 0987201932');
     </script>
 </body>
 </html>
