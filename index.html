@@ -1,422 +1,638 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=yes">
-  <title>UCHIHA V7 · Official Announcement</title>
-  <style>
-    /* ===== reset & base ===== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      min-height: 100vh;
-      min-height: 100dvh;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-      background: #0a0a12;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      padding-top: env(safe-area-inset-top, 24px);
-      padding-bottom: env(safe-area-inset-bottom, 24px);
-      /* UCHIHA theme: deep crimson + dark + purple/red glow */
-      background: radial-gradient(circle at 30% 20%, #1a0a0f, #050205 75%);
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    /* ===== moving gradient background (UCHIHA red/purple) ===== */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      background: radial-gradient(ellipse at 25% 30%, rgba(180, 20, 40, 0.30) 0%, transparent 55%),
-                  radial-gradient(ellipse at 75% 60%, rgba(120, 0, 200, 0.20) 0%, transparent 50%),
-                  radial-gradient(ellipse at 50% 80%, rgba(200, 30, 60, 0.15) 0%, transparent 45%);
-      background-blend-mode: soft-light, screen, normal;
-      animation: gradientShift 18s ease-in-out infinite alternate;
-      pointer-events: none;
-    }
-
-    @keyframes gradientShift {
-      0% { opacity: 0.7; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.02); }
-      100% { opacity: 0.7; transform: scale(0.98); }
-    }
-
-    /* ===== floating particles (UCHIHA-style embers / sharingan glow) ===== */
-    .particles {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .particle {
-      position: absolute;
-      width: 5px;
-      height: 5px;
-      background: rgba(255, 80, 100, 0.5);
-      border-radius: 50%;
-      filter: blur(2px);
-      animation: floatParticle 22s infinite alternate ease-in-out;
-      box-shadow: 0 0 18px rgba(220, 40, 60, 0.4);
-    }
-
-    .particle:nth-child(1) { left: 12%; top: 18%; animation-duration: 19s; opacity: 0.7; width: 7px; height: 7px; background: rgba(255, 60, 80, 0.6); }
-    .particle:nth-child(2) { left: 88%; top: 12%; animation-duration: 25s; opacity: 0.5; background: rgba(200, 40, 200, 0.5); }
-    .particle:nth-child(3) { left: 40%; top: 85%; animation-duration: 21s; opacity: 0.6; width: 9px; height: 9px; background: rgba(255, 100, 120, 0.4); }
-    .particle:nth-child(4) { left: 22%; top: 70%; animation-duration: 27s; opacity: 0.4; background: rgba(180, 30, 200, 0.5); }
-    .particle:nth-child(5) { left: 75%; top: 35%; animation-duration: 20s; opacity: 0.7; width: 6px; height: 6px; background: rgba(255, 50, 70, 0.6); }
-    .particle:nth-child(6) { left: 50%; top: 8%; animation-duration: 23s; opacity: 0.5; background: rgba(200, 60, 200, 0.4); }
-    .particle:nth-child(7) { left: 6%; top: 55%; animation-duration: 30s; opacity: 0.3; width: 12px; height: 12px; background: rgba(255, 40, 60, 0.3); }
-    .particle:nth-child(8) { left: 94%; top: 78%; animation-duration: 26s; opacity: 0.4; background: rgba(180, 20, 200, 0.4); }
-
-    @keyframes floatParticle {
-      0% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(25px, -35px) scale(1.3); }
-      66% { transform: translate(-18px, 22px) scale(0.8); }
-      100% { transform: translate(12px, -12px) scale(1.1); }
-    }
-
-    /* ===== main glass card container ===== */
-    .announcement-wrapper {
-      position: relative;
-      z-index: 10;
-      width: 100%;
-      max-width: 820px;
-      margin: 0 auto;
-      animation: fadeIn 1.4s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
-      opacity: 0;
-    }
-
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(18px) scale(0.98); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    /* ===== GLASS CARD · UCHIHA theme ===== */
-    .glass-card {
-      background: rgba(18, 6, 12, 0.55);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      border-radius: 56px;
-      padding: 40px 36px 32px;
-      border: 1px solid rgba(220, 80, 100, 0.25);
-      box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.9),
-                  0 0 0 1px rgba(200, 60, 80, 0.12) inset,
-                  0 0 60px rgba(200, 30, 60, 0.20);
-      position: relative;
-      overflow: hidden;
-      transition: all 0.2s ease;
-    }
-
-    /* ===== UCHIHA neon beam (red/purple) ===== */
-    .glass-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: conic-gradient(from 0deg at 50% 50%, 
-        rgba(200, 40, 70, 0.04), 
-        rgba(180, 30, 200, 0.05), 
-        rgba(220, 60, 80, 0.03), 
-        rgba(160, 20, 200, 0.06), 
-        rgba(200, 40, 70, 0.04));
-      animation: rotateBeam 24s linear infinite;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    @keyframes rotateBeam {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* ===== inner glow border (sharingan vibe) ===== */
-    .glass-card::after {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: 58px;
-      padding: 2px;
-      background: linear-gradient(135deg, rgba(220, 60, 100, 0.35), rgba(180, 40, 200, 0.25), rgba(200, 50, 80, 0.35));
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-      z-index: 1;
-      animation: borderGlow 8s ease-in-out infinite alternate;
-    }
-
-    @keyframes borderGlow {
-      0% { opacity: 0.3; }
-      50% { opacity: 0.9; }
-      100% { opacity: 0.4; }
-    }
-
-    /* ===== card content (above pseudo) ===== */
-    .card-content {
-      position: relative;
-      z-index: 5;
-      color: #f0e6ea;
-    }
-
-    /* ===== HEADER ===== */
-    .header {
-      text-align: center;
-      margin-bottom: 28px;
-      letter-spacing: 0.02em;
-    }
-
-    .main-title {
-      font-size: clamp(2.8rem, 12vw, 4.8rem);
-      font-weight: 800;
-      background: linear-gradient(135deg, #ff8a9e, #d46a9e, #c084fc, #ff8a9e);
-      background-size: 300% 300%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: gradientText 6s ease-in-out infinite alternate;
-      text-shadow: 0 0 40px rgba(200, 60, 100, 0.30);
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-    }
-
-    @keyframes gradientText {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .sub-headline {
-      font-size: clamp(0.8rem, 2.5vw, 1.0rem);
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: rgba(230, 180, 200, 0.7);
-      margin-top: 6px;
-      font-weight: 400;
-      text-shadow: 0 0 20px rgba(200, 80, 120, 0.2);
-      border-top: 1px solid rgba(220, 120, 150, 0.12);
-      padding-top: 12px;
-      display: inline-block;
-    }
-
-    /* ===== announcement blocks ===== */
-    .announce-block {
-      margin: 28px 0 20px;
-      padding: 0 4px;
-    }
-
-    .block-title {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: #f0ccd4;
-      margin-bottom: 14px;
-      letter-spacing: 0.02em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-left: 3px solid rgba(220, 80, 120, 0.5);
-      padding-left: 16px;
-      text-shadow: 0 0 16px rgba(200, 60, 100, 0.2);
-    }
-
-    .block-content {
-      font-size: clamp(1rem, 2.2vw, 1.15rem);
-      line-height: 1.7;
-      color: rgba(240, 220, 230, 0.92);
-      padding-left: 8px;
-      font-weight: 350;
-      letter-spacing: 0.01em;
-    }
-
-    .block-content p {
-      margin-bottom: 12px;
-    }
-
-    .highlight-line {
-      display: block;
-      font-weight: 600;
-      background: linear-gradient(135deg, #ff9aae, #d48ad4);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      font-size: clamp(1.1rem, 2.5vw, 1.3rem);
-      padding: 8px 0 4px;
-      text-shadow: 0 0 30px rgba(200, 80, 140, 0.25);
-      letter-spacing: -0.01em;
-    }
-
-    .highlight-line.contact {
-      background: linear-gradient(135deg, #fbbf24, #f59e0b);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      font-weight: 700;
-      text-shadow: 0 0 35px rgba(245, 158, 11, 0.25);
-    }
-
-    .divider-light {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(220, 150, 180, 0.20), transparent);
-      margin: 28px 0 24px;
-    }
-
-    /* ===== FOOTER ===== */
-    .footer {
-      margin-top: 30px;
-      text-align: center;
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      color: rgba(200, 160, 180, 0.35);
-      border-top: 1px solid rgba(220, 120, 150, 0.06);
-      padding-top: 24px;
-      text-transform: uppercase;
-      font-weight: 400;
-    }
-
-    .footer span {
-      display: inline-block;
-      margin: 0 6px;
-    }
-
-    /* ===== responsive fine-tune ===== */
-    @media (max-width: 640px) {
-      body { padding: 16px; }
-      .glass-card {
-        padding: 28px 18px 24px;
-        border-radius: 40px;
-      }
-      .block-title {
-        font-size: 1.1rem;
-        padding-left: 12px;
-      }
-      .block-content {
-        font-size: 0.95rem;
-        padding-left: 4px;
-      }
-      .highlight-line {
-        font-size: 1rem;
-      }
-      .footer {
-        font-size: 0.6rem;
-        padding-top: 20px;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .glass-card {
-        padding: 24px 14px 20px;
-        border-radius: 32px;
-      }
-      .main-title {
-        font-size: 2.5rem;
-      }
-      .block-content {
-        font-size: 0.9rem;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .glass-card {
-        padding: 50px 48px 36px;
-      }
-    }
-
-    /* ===== safe area support ===== */
-    @supports (padding: max(0px)) {
-      .announcement-wrapper {
-        padding-left: max(16px, env(safe-area-inset-left));
-        padding-right: max(16px, env(safe-area-inset-right));
-      }
-    }
-
-    /* ===== no interactions ===== */
-    .glass-card, .glass-card * {
-      user-select: none;
-      -webkit-user-select: none;
-      pointer-events: none; /* absolutely no buttons/links */
-    }
-    .glass-card .block-content {
-      pointer-events: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <title>IPA Forge · TrollStore</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js">
+    </script>
+    <style>
+        body {
+            background: #f6f9fc;
+            transition: background 0.2s;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            transition: all 0.25s ease;
+        }
+        .drop-zone.drag-over {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.06);
+        }
+        .step-badge {
+            background: #eef2ff;
+            color: #4338ca;
+        }
+        .log-line {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+        #logContainer::-webkit-scrollbar {
+            width: 5px;
+        }
+        #logContainer::-webkit-scrollbar-track {
+            background: #1e293b;
+            border-radius: 10px;
+        }
+        #logContainer::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 10px;
+        }
+        .btn-primary {
+            background: linear-gradient(145deg, #2563eb, #1d4ed8);
+            box-shadow: 0 8px 20px -6px rgba(37, 99, 235, 0.35);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px -8px rgba(37, 99, 235, 0.45);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+        .tab-active {
+            background: #2563eb;
+            color: white;
+        }
+        .tab-inactive {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .tab-inactive:hover {
+            background: #e2e8f0;
+        }
+    </style>
 </head>
-<body>
-  <!-- UCHIHA-style particles (embers/glow) -->
-  <div class="particles" aria-hidden="true">
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-  </div>
+<body class="font-sans antialiased text-slate-800">
 
-  <!-- MAIN CARD -->
-  <div class="announcement-wrapper">
-    <div class="glass-card">
-      <div class="card-content">
+    <div class="max-w-6xl mx-auto px-4 py-8 md:py-12">
 
-        <!-- HEADER -->
-        <div class="header">
-          <div class="main-title">⚡ UCHIHA V7</div>
-          <div class="sub-headline">OFFICIAL SYSTEM ANNOUNCEMENT</div>
+        <!-- Header -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+            <div>
+                <h1 class="text-4xl font-extrabold tracking-tight flex items-center gap-2">
+                    <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">IPA</span> Forge
+                </h1>
+                <p class="text-sm text-slate-500 mt-0.5">Tạo file IPA không cần ký · dành cho TrollStore</p>
+            </div>
+            <div class="flex items-center gap-2 text-sm bg-white/60 px-4 py-2 rounded-full shadow-sm border border-slate-200/60">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span class="font-medium text-slate-600">Chế độ không cần chứng chỉ</span>
+            </div>
         </div>
 
-        <!-- VIETNAMESE -->
-        <div class="announce-block">
-          <div class="block-title">🔔 ĐỘI NGŨ UCHIHA THÔNG BÁO</div>
-          <div class="block-content">
-            <p>
-              “Sau thời gian update và hoàn thiện hệ thống, ĐỘI NGŨ UCHIHA chính thức thông báo:
-            </p>
-            <span class="highlight-line">🚀 UCHIHA VERSION 7 đã chính thức được cập nhật.</span>
-            <p>
-              Phiên bản V7 được nâng cấp và hoàn thiện với nhiều thay đổi mới, mang đến trải nghiệm hiện đại và ổn định hơn.
-            </p>
-            <span class="highlight-line contact">IB ADMIN TIEN HOC ĐỂ CÀI GÓI CÀI ĐẶT V7</span>
-          </div>
+        <!-- Step indicator -->
+        <div class="flex items-center gap-2 mb-8 text-sm font-medium flex-wrap">
+            <span class="step-badge px-4 py-1.5 rounded-full flex items-center gap-1.5">
+                <span class="bg-blue-600 text-white w-5 h-5 rounded-full text-xs flex items-center justify-center">1</span> Dự án
+            </span>
+            <span class="text-slate-400">—</span>
+            <span class="step-badge px-4 py-1.5 rounded-full flex items-center gap-1.5">
+                <span class="bg-blue-600 text-white w-5 h-5 rounded-full text-xs flex items-center justify-center">2</span> Thông tin
+            </span>
+            <span class="text-slate-400">—</span>
+            <span class="step-badge px-4 py-1.5 rounded-full flex items-center gap-1.5">
+                <span class="bg-blue-600 text-white w-5 h-5 rounded-full text-xs flex items-center justify-center">3</span> Tạo IPA
+            </span>
         </div>
 
-        <div class="divider-light"></div>
+        <!-- Main grid -->
+        <div class="grid lg:grid-cols-5 gap-6">
 
-        <!-- ENGLISH -->
-        <div class="announce-block">
-          <div class="block-title">🔔 UCHIHA TEAM ANNOUNCEMENT</div>
-          <div class="block-content">
-            <p>
-              “After a period of updates and system improvements, the UCHIHA TEAM officially announces:
-            </p>
-            <span class="highlight-line">🚀 UCHIHA VERSION 7 is now officially available.</span>
-            <p>
-              Version V7 has been upgraded and improved with many new changes, providing a more modern and stable experience.
-            </p>
-            <span class="highlight-line contact">CONTACT ADMIN TIEN HOC TO GET THE V7 INSTALLATION PACKAGE</span>
-          </div>
+            <!-- Left: upload + metadata (3 cols) -->
+            <div class="lg:col-span-3 space-y-6">
+
+                <!-- Step 1: Upload project -->
+                <div class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200/60">
+                    <h2 class="text-lg font-semibold flex items-center gap-2 mb-4">
+                        <span class="bg-blue-600 text-white w-7 h-7 rounded-full text-sm flex items-center justify-center">1</span>
+                        Tải lên dự án web
+                    </h2>
+
+                    <!-- Tabs: Upload / Paste -->
+                    <div class="flex gap-2 mb-4">
+                        <button id="tabUpload" class="tab-active px-4 py-2 rounded-xl text-sm font-medium transition flex-1">📁 Tải file / thư mục</button>
+                        <button id="tabPaste" class="tab-inactive px-4 py-2 rounded-xl text-sm font-medium transition flex-1">📝 Dán mã HTML</button>
+                    </div>
+
+                    <!-- Upload panel -->
+                    <div id="uploadPanel">
+                        <div id="dropZone" class="drop-zone rounded-2xl p-8 text-center cursor-pointer transition bg-white/40 hover:bg-white/60">
+                            <div class="flex flex-col items-center justify-center gap-2">
+                                <svg class="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                                </svg>
+                                <p class="text-sm font-medium text-slate-700">Kéo thả thư mục hoặc file <span class="font-bold">.zip</span></p>
+                                <p class="text-xs text-slate-400">hoặc nhấp để chọn</p>
+                                <span class="text-[11px] text-blue-600 bg-blue-50 px-3 py-1 rounded-full mt-1">Hỗ trợ HTML / JS / CSS</span>
+                            </div>
+                            <input id="projectInput" type="file" webkitdirectory multiple class="hidden" accept=".html,.js,.css,.png,.jpg,.svg,.json,.zip">
+                            <input id="zipInput" type="file" accept=".zip" class="hidden">
+                        </div>
+                        <div id="fileList" class="mt-3 text-sm text-slate-600 bg-white/50 rounded-xl p-3 hidden">
+                            <span class="font-medium">📁 Đã tải lên:</span> <span id="fileCount">0</span> file
+                        </div>
+                    </div>
+
+                    <!-- Paste panel -->
+                    <div id="pastePanel" class="hidden">
+                        <div class="mt-1">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Dán mã HTML của bạn vào đây</label>
+                            <textarea id="htmlCodeArea" rows="8" placeholder="< !DOCTYPE html> <html> ... </html>" class="w-full rounded-xl border border-slate-300 bg-white/70 px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-blue-400 outline-none transition resize-y"></textarea>
+                            <div class="mt-2 text-xs text-slate-500 bg-blue-50/70 p-3 rounded-xl border border-blue-200/60">
+                                💡 Mã HTML sẽ được sử dụng làm <strong>index.html</strong>. Các file CSS/JS có thể được nhúng trực tiếp hoặc dùng CDN.
+                            </div>
+                            <div id="pasteStatus" class="mt-2 text-sm text-emerald-600 hidden">
+                                ✅ Đã sẵn sàng dùng mã HTML đã dán
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 text-xs text-amber-600 bg-amber-50/70 p-3 rounded-xl border border-amber-200/60 flex items-start gap-2">
+                        <span class="text-base">💡</span>
+                        <span>Bạn có thể <strong>tải lên thư mục / .zip</strong> hoặc <strong>dán trực tiếp mã HTML</strong>. Ưu tiên dùng dán HTML.</span>
+                    </div>
+                </div>
+
+                <!-- Step 2: Metadata -->
+                <div class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200/60">
+                    <h2 class="text-lg font-semibold flex items-center gap-2 mb-4">
+                        <span class="bg-blue-600 text-white w-7 h-7 rounded-full text-sm flex items-center justify-center">2</span>
+                        Thông tin ứng dụng
+                    </h2>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700">Tên ứng dụng</label>
+                            <input id="appName" type="text" value="MyWebApp" class="mt-1 w-full rounded-xl border border-slate-300 bg-white/70 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-400 outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700">Bundle ID</label>
+                            <input id="bundleId" type="text" value="com.example.mywebapp" class="mt-1 w-full rounded-xl border border-slate-300 bg-white/70 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-400 outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700">Phiên bản</label>
+                            <input id="appVersion" type="text" value="1.0.0" class="mt-1 w-full rounded-xl border border-slate-300 bg-white/70 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-400 outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700">Biểu tượng (PNG, 512x512)</label>
+                            <input id="iconInput" type="file" accept="image/png" class="mt-1 w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: actions + log (2 cols) -->
+            <div class="lg:col-span-2 space-y-6">
+
+                <!-- Build & download -->
+                <div class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200/60">
+                    <h2 class="text-lg font-semibold flex items-center gap-2 mb-4">
+                        <span class="bg-blue-600 text-white w-7 h-7 rounded-full text-sm flex items-center justify-center">3</span>
+                        Tạo IPA
+                    </h2>
+                    <button id="buildBtn" class="btn-primary w-full py-3 px-4 text-white font-semibold rounded-xl transition flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        Tạo file IPA
+                    </button>
+                    <button id="downloadBtn" disabled class="mt-3 w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-medium rounded-xl transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Tải xuống IPA
+                    </button>
+                    <button id="resetBtn" class="mt-2 w-full py-2 bg-slate-200 hover:bg-slate-300 rounded-xl transition text-sm font-medium text-slate-700">
+                        Đặt lại
+                    </button>
+                    <div class="mt-3 text-xs text-slate-400 flex justify-between">
+                        <span id="stepStatus" class="font-medium text-slate-600">Sẵn sàng</span>
+                        <span id="fileSize" class="text-slate-400">—</span>
+                    </div>
+                </div>
+
+                <!-- Log console -->
+                <div class="glass-card rounded-2xl p-4 shadow-sm border border-slate-200/60">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-slate-700">Nhật ký</span>
+                        <button id="clearLogBtn" class="text-xs text-slate-400 hover:text-slate-600 transition">Xóa</button>
+                    </div>
+                    <div id="logContainer" class="bg-slate-900 rounded-xl p-3 h-44 overflow-y-auto font-mono text-xs text-green-300 leading-relaxed">
+                        <div class="text-slate-500">⏳ Chờ thao tác …</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- FOOTER -->
-        <div class="footer">
-          <span>© 2026 UCHIHA TEAM</span>
-          <span>·</span>
-          <span>ALL RIGHTS RESERVED</span>
+        <!-- Instructions -->
+        <div class="mt-8 p-5 bg-blue-50/70 border border-blue-200/60 rounded-2xl text-sm text-slate-700">
+            <p class="font-semibold flex items-center gap-2 text-blue-800">
+                <span class="text-lg">📲</span> Hướng dẫn cài đặt với TrollStore
+            </p>
+            <ul class="list-disc list-inside space-y-0.5 text-xs text-slate-600 mt-1">
+                <li>File IPA được tạo ra <strong>không cần ký</strong> và tương thích với <strong>TrollStore</strong> (iOS 14–17).</li>
+                <li>Sau khi tải xuống, mở file IPA bằng TrollStore → nhấn <span class="font-mono">Install</span>.</li>
+                <li>Ứng dụng sẽ chạy dưới dạng WebView hiển thị toàn bộ dự án HTML của bạn.</li>
+                <li>Nếu bạn cần hỗ trợ thêm, hãy kiểm tra log ở bên phải.</li>
+            </ul>
         </div>
+    </div>
 
-      </div> <!-- /card-content -->
-    </div> <!-- /glass-card -->
-  </div> <!-- /announcement-wrapper -->
+    <script>
+        (function() {
+            "use strict";
+
+            // DOM refs
+            const dropZone = document.getElementById('dropZone');
+            const projectInput = document.getElementById('projectInput');
+            const zipInput = document.getElementById('zipInput');
+            const fileList = document.getElementById('fileList');
+            const fileCount = document.getElementById('fileCount');
+
+            const tabUpload = document.getElementById('tabUpload');
+            const tabPaste = document.getElementById('tabPaste');
+            const uploadPanel = document.getElementById('uploadPanel');
+            const pastePanel = document.getElementById('pastePanel');
+            const htmlCodeArea = document.getElementById('htmlCodeArea');
+            const pasteStatus = document.getElementById('pasteStatus');
+
+            const appName = document.getElementById('appName');
+            const bundleId = document.getElementById('bundleId');
+            const appVersion = document.getElementById('appVersion');
+            const iconInput = document.getElementById('iconInput');
+
+            const buildBtn = document.getElementById('buildBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const logContainer = document.getElementById('logContainer');
+            const stepStatus = document.getElementById('stepStatus');
+            const fileSize = document.getElementById('fileSize');
+            const clearLogBtn = document.getElementById('clearLogBtn');
+
+            // state
+            let projectFiles = []; // Array of { name, path, content (ArrayBuffer or string) }
+            let iconData = null; // ArrayBuffer
+            let generatedIPA = null; // Blob
+            let isBuilding = false;
+            let usePastedHTML = false; // flag: true if using pasted HTML
+
+            // ---------- log ----------
+            function log(msg, type = 'info') {
+                const colors = {
+                    info: 'text-green-300',
+                    warn: 'text-yellow-300',
+                    error: 'text-red-300',
+                    step: 'text-blue-300'
+                };
+                const prefix = type === 'step' ? '▶ ' : type === 'error' ? '✖ ' : '• ';
+                const line = document.createElement('div');
+                line.className = colors[type] || 'text-green-300';
+                line.textContent = prefix + msg;
+                logContainer.appendChild(line);
+                logContainer.scrollTop = logContainer.scrollHeight;
+                stepStatus.textContent = msg;
+            }
+
+            function clearLog() {
+                logContainer.innerHTML = '';
+                stepStatus.textContent = 'Sẵn sàng';
+                fileSize.textContent = '—';
+            }
+
+            // ---------- reset ----------
+            function resetAll() {
+                projectFiles = [];
+                iconData = null;
+                generatedIPA = null;
+                projectInput.value = '';
+                zipInput.value = '';
+                iconInput.value = '';
+                htmlCodeArea.value = '';
+                usePastedHTML = false;
+                pasteStatus.classList.add('hidden');
+                fileList.classList.add('hidden');
+                fileCount.textContent = '0';
+                downloadBtn.disabled = true;
+                clearLog();
+                log('🧹 Đã đặt lại', 'info');
+            }
+            resetBtn.addEventListener('click', resetAll);
+            clearLogBtn.addEventListener('click', clearLog);
+
+            // ---------- Tab switching ----------
+            tabUpload.addEventListener('click', () => {
+                tabUpload.className = 'tab-active px-4 py-2 rounded-xl text-sm font-medium transition flex-1';
+                tabPaste.className = 'tab-inactive px-4 py-2 rounded-xl text-sm font-medium transition flex-1';
+                uploadPanel.classList.remove('hidden');
+                pastePanel.classList.add('hidden');
+                usePastedHTML = false;
+                // reset paste status
+                pasteStatus.classList.add('hidden');
+                log('📁 Chuyển sang chế độ tải file', 'info');
+            });
+
+            tabPaste.addEventListener('click', () => {
+                tabPaste.className = 'tab-active px-4 py-2 rounded-xl text-sm font-medium transition flex-1';
+                tabUpload.className = 'tab-inactive px-4 py-2 rounded-xl text-sm font-medium transition flex-1';
+                uploadPanel.classList.add('hidden');
+                pastePanel.classList.remove('hidden');
+                usePastedHTML = true;
+                // check if there's content
+                if (htmlCodeArea.value.trim()) {
+                    pasteStatus.classList.remove('hidden');
+                }
+                log('📝 Chuyển sang chế độ dán HTML', 'info');
+            });
+
+            // Detect paste content change
+            htmlCodeArea.addEventListener('input', () => {
+                if (htmlCodeArea.value.trim()) {
+                    pasteStatus.classList.remove('hidden');
+                } else {
+                    pasteStatus.classList.add('hidden');
+                }
+            });
+
+            // ---------- handle file upload (folder / zip) ----------
+            function handleFiles(fileListFromInput) {
+                const files = Array.from(fileListFromInput);
+                if (!files.length) return;
+
+                // check if it's a zip
+                const isZip = files.length === 1 && files[0].name.endsWith('.zip');
+                if (isZip) {
+                    const zipFile = files[0];
+                    const reader = new FileReader();
+                    reader.onload = async (ev) => {
+                        try {
+                            const zip = await JSZip.loadAsync(ev.target.result);
+                            const entries = Object.entries(zip.files);
+                            const collected = [];
+                            for (const [path, file] of entries) {
+                                if (file.dir) continue;
+                                const content = await file.async('arraybuffer');
+                                const ext = path.split('.').pop().toLowerCase();
+                                const isText = ['html', 'htm', 'js', 'css', 'json', 'xml', 'svg', 'txt'].includes(ext);
+                                collected.push({
+                                    name: path.split('/').pop(),
+                                    path: path,
+                                    content: content,
+                                    isText: isText
+                                });
+                            }
+                            projectFiles = collected;
+                            fileCount.textContent = collected.length;
+                            fileList.classList.remove('hidden');
+                            log(`📦 Đã giải nén ${collected.length} file từ ZIP`, 'step');
+                        } catch (e) {
+                            log('❌ Lỗi giải nén ZIP: ' + e.message, 'error');
+                        }
+                    };
+                    reader.readAsArrayBuffer(zipFile);
+                    return;
+                }
+
+                // folder upload (webkitdirectory)
+                const collected = [];
+                for (const file of files) {
+                    const relPath = file.webkitRelativePath || file.name;
+                    collected.push({
+                        name: file.name,
+                        path: relPath,
+                        content: file,
+                        isText: file.type.startsWith('text/') || /\.(html|js|css|json|svg|txt)$/i.test(file.name)
+                    });
+                }
+                projectFiles = collected;
+                fileCount.textContent = collected.length;
+                fileList.classList.remove('hidden');
+                log(`📁 Đã tải lên ${collected.length} file từ thư mục`, 'step');
+            }
+
+            // drop zone events
+            dropZone.addEventListener('click', () => projectInput.click());
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('drag-over');
+            });
+            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('drag-over');
+                const items = e.dataTransfer.items;
+                if (items.length === 1 && items[0].kind === 'file') {
+                    const file = items[0].getAsFile();
+                    if (file.name.endsWith('.zip')) {
+                        const dt = new DataTransfer();
+                        dt.items.add(file);
+                        zipInput.files = dt.files;
+                        handleFiles(zipInput.files);
+                        return;
+                    }
+                }
+                const files = e.dataTransfer.files;
+                if (files.length) {
+                    const hasFolder = Array.from(files).some(f => f.webkitRelativePath);
+                    if (hasFolder) {
+                        const dt = new DataTransfer();
+                        for (const f of files) dt.items.add(f);
+                        projectInput.files = dt.files;
+                        handleFiles(projectInput.files);
+                    } else {
+                        if (files.length === 1 && files[0].name.endsWith('.zip')) {
+                            zipInput.files = files;
+                            handleFiles(zipInput.files);
+                        } else {
+                            const dt = new DataTransfer();
+                            for (const f of files) dt.items.add(f);
+                            projectInput.files = dt.files;
+                            handleFiles(projectInput.files);
+                        }
+                    }
+                }
+            });
+
+            projectInput.addEventListener('change', () => {
+                if (projectInput.files.length) handleFiles(projectInput.files);
+            });
+            zipInput.addEventListener('change', () => {
+                if (zipInput.files.length) handleFiles(zipInput.files);
+            });
+
+            // icon handler
+            iconInput.addEventListener('change', () => {
+                if (!iconInput.files.length) { iconData = null; return; }
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    iconData = e.target.result;
+                    log('🖼️ Đã tải biểu tượng', 'info');
+                };
+                reader.readAsArrayBuffer(iconInput.files[0]);
+            });
+
+            // ---------- BUILD IPA ----------
+            buildBtn.addEventListener('click', async () => {
+                if (isBuilding) return;
+
+                // Check if we have source
+                const hasUploadedFiles = projectFiles.length > 0;
+                const hasPastedHTML = htmlCodeArea.value.trim().length > 0;
+
+                if (!hasUploadedFiles && !hasPastedHTML) {
+                    log('⚠️ Vui lòng tải lên dự án hoặc dán mã HTML.', 'error');
+                    return;
+                }
+
+                isBuilding = true;
+                buildBtn.disabled = true;
+                downloadBtn.disabled = true;
+                clearLog();
+                log('🚀 Bắt đầu tạo IPA …', 'step');
+
+                try {
+                    const name = appName.value.trim() || 'MyWebApp';
+                    const bundle = bundleId.value.trim() || 'com.example.mywebapp';
+                    const version = appVersion.value.trim() || '1.0.0';
+
+                    log('📁 Đang đóng gói dự án …', 'step');
+                    await sleep(150);
+
+                    const zip = new JSZip();
+                    const appFolder = `Payload/${name}.app`;
+
+                    // 1. Info.plist
+                    const infoPlist = `<?xml version="1.0" encoding="UTF-8"?>
+                <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+                <plist version="1.0">
+                <dict>
+                    <key>CFBundleName</key><string>${name}</string>
+                    <key>CFBundleIdentifier</key><string>${bundle}</string>
+                    <key>CFBundleVersion</key><string>${version}</string>
+                    <key>CFBundleShortVersionString</key><string>${version}</string>
+                    <key>CFBundleExecutable</key><string>${name}</string>
+                    <key>CFBundlePackageType</key><string>APPL</string>
+                    <key>CFBundleSupportedPlatforms</key><array><string>iPhoneOS</string></array>
+                    <key>MinimumOSVersion</key><string>11.0</string>
+                    <key>UIDeviceFamily</key><array><integer>1</integer><integer>2</integer></array>
+                    <key>UIRequiresFullScreen</key><true/>
+                    <key>UIStatusBarStyle</key><string>UIStatusBarStyleDefault</string>
+                    <key>UILaunchStoryboardName</key><string>LaunchScreen</string>
+                </dict>
+                </plist>`;
+                    zip.file(`${appFolder}/Info.plist`, infoPlist);
+
+                    // 2. Add icon if provided
+                    if (iconData) {
+                        zip.file(`${appFolder}/icon.png`, iconData);
+                    } else {
+                        // tiny dummy icon (1x1 transparent)
+                        zip.file(`${appFolder}/icon.png`, 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', { base64: true });
+                    }
+
+                    // 3. Add project files
+                    let hasIndex = false;
+
+                    // Check if we should use pasted HTML
+                    if (htmlCodeArea.value.trim()) {
+                        // Use pasted HTML as index.html
+                        const htmlContent = htmlCodeArea.value.trim();
+                        zip.file(`${appFolder}/index.html`, htmlContent);
+                        hasIndex = true;
+                        log('📝 Đã nhúng mã HTML đã dán làm index.html', 'info');
+
+                        // If there are also uploaded files, add them too (as assets)
+                        if (projectFiles.length > 0) {
+                            for (const file of projectFiles) {
+                                let content = file.content;
+                                if (content instanceof File) {
+                                    const buf = await content.arrayBuffer();
+                                    content = buf;
+                                }
+                                let relativePath = file.path;
+                                if (relativePath.startsWith('./')) relativePath = relativePath.slice(2);
+                                // Skip if it's index.html from upload (prefer pasted one)
+                                if (file.name.toLowerCase() === 'index.html') continue;
+                                zip.file(`${appFolder}/assets/${relativePath}`, content);
+                            }
+                            log(`📦 Đã thêm ${projectFiles.length} file tải lên vào thư mục assets`, 'info');
+                        }
+                    } else if (projectFiles.length > 0) {
+                        // Use uploaded files
+                        for (const file of projectFiles) {
+                            let content = file.content;
+                            if (content instanceof File) {
+                                const buf = await content.arrayBuffer();
+                                content = buf;
+                            }
+                            let relativePath = file.path;
+                            if (relativePath.startsWith('./')) relativePath = relativePath.slice(2);
+                            if (file.name.toLowerCase() === 'index.html') {
+                                hasIndex = true;
+                                zip.file(`${appFolder}/index.html`, content);
+                            } else {
+                                zip.file(`${appFolder}/assets/${relativePath}`, content);
+                            }
+                        }
+                    }
+
+                    // if no index.html, create default
+                    if (!hasIndex) {
+                        zip.file(`${appFolder}/index.html`,
+                            `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${name}</title></head><body style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:system-ui;background:#f0f4ff;color:#1e293b;"><div style="text-align:center;padding:2rem;"><h1>${name}</h1><p style="color:#475569;">Không tìm thấy index.html</p></div></body></html>`
+                        );
+                    }
+
+                    // 4. dummy executable
+                    zip.file(`${appFolder}/${name}`, '#!/bin/bash\necho "dummy"', { unixPermissions: 0o755 });
+
+                    log('📄 Đã tạo Info.plist và cấu trúc thư mục', 'step');
+                    await sleep(150);
+
+                    // Generate IPA
+                    log('📦 Nén file IPA …', 'step');
+                    const ipaBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
+                    generatedIPA = ipaBlob;
+                    fileSize.textContent = (ipaBlob.size / 1024).toFixed(1) + ' KB';
+                    log(`✅ IPA tạo thành công (${(ipaBlob.size / 1024).toFixed(1)} KB)`, 'step');
+
+                    downloadBtn.disabled = false;
+                    stepStatus.textContent = '✅ Hoàn tất';
+
+                } catch (err) {
+                    log(`❌ Lỗi: ${err.message}`, 'error');
+                    console.error(err);
+                } finally {
+                    isBuilding = false;
+                    buildBtn.disabled = false;
+                }
+            });
+
+            // ---------- download ----------
+            downloadBtn.addEventListener('click', () => {
+                if (!generatedIPA) return;
+                const name = appName.value.trim() || 'MyWebApp';
+                saveAs(generatedIPA, `${name}.ipa`);
+                log(`⬇️ Đang tải ${name}.ipa`, 'info');
+            });
+
+            function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+            // initial log
+            log('📱 IPA Forge sẵn sàng — tải lên dự án hoặc dán HTML để tạo IPA cho TrollStore.', 'info');
+
+        })();
+    </script>
+
 </body>
 </html>
