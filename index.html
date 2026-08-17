@@ -84,11 +84,11 @@
                 <h1 class="text-4xl font-extrabold tracking-tight flex items-center gap-2">
                     <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">IPA</span> Forge
                 </h1>
-                <p class="text-sm text-slate-500 mt-0.5">Tạo file IPA không cần ký · dành cho TrollStore</p>
+                <p class="text-sm text-slate-500 mt-0.5">Tạo IPA không cần ký · tương thích TrollStore</p>
             </div>
             <div class="flex items-center gap-2 text-sm bg-white/60 px-4 py-2 rounded-full shadow-sm border border-slate-200/60">
                 <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span class="font-medium text-slate-600">Chế độ không cần chứng chỉ</span>
+                <span class="font-medium text-slate-600">Không cần chứng chỉ</span>
             </div>
         </div>
 
@@ -161,7 +161,7 @@
 
                     <div class="mt-3 text-xs text-amber-600 bg-amber-50/70 p-3 rounded-xl border border-amber-200/60 flex items-start gap-2">
                         <span class="text-base">💡</span>
-                        <span>Bạn có thể <strong>tải lên thư mục / .zip</strong> hoặc <strong>dán trực tiếp mã HTML</strong>. Ưu tiên dùng dán HTML.</span>
+                        <span>Bạn có thể <strong>tải lên thư mục / .zip</strong> hoặc <strong>dán trực tiếp mã HTML</strong>. Hệ thống sẽ tự động lọc bỏ file hệ thống (.DS_Store, __MACOSX, ...).</span>
                     </div>
                 </div>
 
@@ -244,7 +244,7 @@
                 <li>File IPA được tạo ra <strong>không cần ký</strong> và tương thích với <strong>TrollStore</strong> (iOS 14–17).</li>
                 <li>Sau khi tải xuống, mở file IPA bằng TrollStore → nhấn <span class="font-mono">Install</span>.</li>
                 <li>Ứng dụng sẽ chạy dưới dạng WebView hiển thị toàn bộ dự án HTML của bạn.</li>
-                <li>Nếu bạn cần hỗ trợ thêm, hãy kiểm tra log ở bên phải.</li>
+                <li>Nếu gặp lỗi, hãy kiểm tra nhật ký để biết chi tiết.</li>
             </ul>
         </div>
     </div>
@@ -280,12 +280,68 @@
             const fileSize = document.getElementById('fileSize');
             const clearLogBtn = document.getElementById('clearLogBtn');
 
-            // state
-            let projectFiles = []; // Array of { name, path, content (ArrayBuffer or string) }
-            let iconData = null; // ArrayBuffer
-            let generatedIPA = null; // Blob
-            let isBuilding = false;
-            let usePastedHTML = false; // flag: true if using pasted HTML
+            // ---------- Helper: sanitize ----------
+            function sanitizeName(input) {
+                // Remove Vietnamese diacritics
+                const diacriticsMap = {
+                    'á': 'a', 'à': 'a', 'ả': 'a', 'ã': 'a', 'ạ': 'a',
+                    'ă': 'a', 'ắ': 'a', 'ằ': 'a', 'ẳ': 'a', 'ẵ': 'a', 'ặ': 'a',
+                    'â': 'a', 'ấ': 'a', 'ầ': 'a', 'ẩ': 'a', 'ẫ': 'a', 'ậ': 'a',
+                    'đ': 'd',
+                    'é': 'e', 'è': 'e', 'ẻ': 'e', 'ẽ': 'e', 'ẹ': 'e',
+                    'ê': 'e', 'ế': 'e', 'ề': 'e', 'ể': 'e', 'ễ': 'e', 'ệ': 'e',
+                    'í': 'i', 'ì': 'i', 'ỉ': 'i', 'ĩ': 'i', 'ị': 'i',
+                    'ó': 'o', 'ò': 'o', 'ỏ': 'o', 'õ': 'o', 'ọ': 'o',
+                    'ô': 'o', 'ố': 'o', 'ồ': 'o', 'ổ': 'o', 'ỗ': 'o', 'ộ': 'o',
+                    'ơ': 'o', 'ớ': 'o', 'ờ': 'o', 'ở': 'o', 'ỡ': 'o', 'ợ': 'o',
+                    'ú': 'u', 'ù': 'u', 'ủ': 'u', 'ũ': 'u', 'ụ': 'u',
+                    'ư': 'u', 'ứ': 'u', 'ừ': 'u', 'ử': 'u', 'ữ': 'u', 'ự': 'u',
+                    'ý': 'y', 'ỳ': 'y', 'ỷ': 'y', 'ỹ': 'y', 'ỵ': 'y'
+                };
+                let result = input.toLowerCase();
+                for (let [key, value] of Object.entries(diacriticsMap)) {
+                    result = result.replace(new RegExp(key, 'g'), value);
+                }
+                // Remove special characters, keep letters, numbers, dot, underscore, dash
+                result = result.replace(/[^a-z0-9._-]/g, '');
+                // Replace spaces with underscore
+                result = result.replace(/\s+/g, '_');
+                // Remove leading/trailing special chars
+                result = result.replace(/^[._-]+|[._-]+$/g, '');
+                return result || 'app';
+            }
+
+            function sanitizeBundleId(input) {
+                let result = input.toLowerCase();
+                // Remove diacritics
+                const diacriticsMap = {
+                    'á': 'a', 'à': 'a', 'ả': 'a', 'ã': 'a', 'ạ': 'a',
+                    'ă': 'a', 'ắ': 'a', 'ằ': 'a', 'ẳ': 'a', 'ẵ': 'a', 'ặ': 'a',
+                    'â': 'a', 'ấ': 'a', 'ầ': 'a', 'ẩ': 'a', 'ẫ': 'a', 'ậ': 'a',
+                    'đ': 'd',
+                    'é': 'e', 'è': 'e', 'ẻ': 'e', 'ẽ': 'e', 'ẹ': 'e',
+                    'ê': 'e', 'ế': 'e', 'ề': 'e', 'ể': 'e', 'ễ': 'e', 'ệ': 'e',
+                    'í': 'i', 'ì': 'i', 'ỉ': 'i', 'ĩ': 'i', 'ị': 'i',
+                    'ó': 'o', 'ò': 'o', 'ỏ': 'o', 'õ': 'o', 'ọ': 'o',
+                    'ô': 'o', 'ố': 'o', 'ồ': 'o', 'ổ': 'o', 'ỗ': 'o', 'ộ': 'o',
+                    'ơ': 'o', 'ớ': 'o', 'ờ': 'o', 'ở': 'o', 'ỡ': 'o', 'ợ': 'o',
+                    'ú': 'u', 'ù': 'u', 'ủ': 'u', 'ũ': 'u', 'ụ': 'u',
+                    'ư': 'u', 'ứ': 'u', 'ừ': 'u', 'ử': 'u', 'ữ': 'u', 'ự': 'u',
+                    'ý': 'y', 'ỳ': 'y', 'ỷ': 'y', 'ỹ': 'y', 'ỵ': 'y'
+                };
+                for (let [key, value] of Object.entries(diacriticsMap)) {
+                    result = result.replace(new RegExp(key, 'g'), value);
+                }
+                // Keep only letters, numbers, dot, dash
+                result = result.replace(/[^a-z0-9.-]/g, '');
+                // Ensure at least one dot
+                if (!result.includes('.')) {
+                    result = 'com.example.' + result;
+                }
+                // Remove leading/trailing dots
+                result = result.replace(/^\.+|\.+$/g, '');
+                return result || 'com.example.myapp';
+            }
 
             // ---------- log ----------
             function log(msg, type = 'info') {
@@ -337,7 +393,6 @@
                 uploadPanel.classList.remove('hidden');
                 pastePanel.classList.add('hidden');
                 usePastedHTML = false;
-                // reset paste status
                 pasteStatus.classList.add('hidden');
                 log('📁 Chuyển sang chế độ tải file', 'info');
             });
@@ -348,14 +403,12 @@
                 uploadPanel.classList.add('hidden');
                 pastePanel.classList.remove('hidden');
                 usePastedHTML = true;
-                // check if there's content
                 if (htmlCodeArea.value.trim()) {
                     pasteStatus.classList.remove('hidden');
                 }
                 log('📝 Chuyển sang chế độ dán HTML', 'info');
             });
 
-            // Detect paste content change
             htmlCodeArea.addEventListener('input', () => {
                 if (htmlCodeArea.value.trim()) {
                     pasteStatus.classList.remove('hidden');
@@ -364,12 +417,20 @@
                 }
             });
 
-            // ---------- handle file upload (folder / zip) ----------
+            // ---------- file handling with filtering ----------
+            function isSystemFile(path) {
+                const name = path.split('/').pop();
+                // Filter .DS_Store, __MACOSX, ._ files, Thumbs.db, etc.
+                if (name === '.DS_Store' || name === 'Thumbs.db') return true;
+                if (path.includes('__MACOSX')) return true;
+                if (name.startsWith('._')) return true;
+                return false;
+            }
+
             function handleFiles(fileListFromInput) {
                 const files = Array.from(fileListFromInput);
                 if (!files.length) return;
 
-                // check if it's a zip
                 const isZip = files.length === 1 && files[0].name.endsWith('.zip');
                 if (isZip) {
                     const zipFile = files[0];
@@ -379,8 +440,13 @@
                             const zip = await JSZip.loadAsync(ev.target.result);
                             const entries = Object.entries(zip.files);
                             const collected = [];
+                            let filteredCount = 0;
                             for (const [path, file] of entries) {
                                 if (file.dir) continue;
+                                if (isSystemFile(path)) {
+                                    filteredCount++;
+                                    continue;
+                                }
                                 const content = await file.async('arraybuffer');
                                 const ext = path.split('.').pop().toLowerCase();
                                 const isText = ['html', 'htm', 'js', 'css', 'json', 'xml', 'svg', 'txt'].includes(ext);
@@ -394,6 +460,9 @@
                             projectFiles = collected;
                             fileCount.textContent = collected.length;
                             fileList.classList.remove('hidden');
+                            if (filteredCount > 0) {
+                                log(`🗑️ Đã lọc bỏ ${filteredCount} file hệ thống`, 'warn');
+                            }
                             log(`📦 Đã giải nén ${collected.length} file từ ZIP`, 'step');
                         } catch (e) {
                             log('❌ Lỗi giải nén ZIP: ' + e.message, 'error');
@@ -403,10 +472,15 @@
                     return;
                 }
 
-                // folder upload (webkitdirectory)
+                // folder upload
                 const collected = [];
+                let filteredCount = 0;
                 for (const file of files) {
                     const relPath = file.webkitRelativePath || file.name;
+                    if (isSystemFile(relPath)) {
+                        filteredCount++;
+                        continue;
+                    }
                     collected.push({
                         name: file.name,
                         path: relPath,
@@ -417,6 +491,9 @@
                 projectFiles = collected;
                 fileCount.textContent = collected.length;
                 fileList.classList.remove('hidden');
+                if (filteredCount > 0) {
+                    log(`🗑️ Đã lọc bỏ ${filteredCount} file hệ thống`, 'warn');
+                }
                 log(`📁 Đã tải lên ${collected.length} file từ thư mục`, 'step');
             }
 
@@ -481,11 +558,16 @@
                 reader.readAsArrayBuffer(iconInput.files[0]);
             });
 
+            let projectFiles = [];
+            let iconData = null;
+            let generatedIPA = null;
+            let isBuilding = false;
+            let usePastedHTML = false;
+
             // ---------- BUILD IPA ----------
             buildBtn.addEventListener('click', async () => {
                 if (isBuilding) return;
 
-                // Check if we have source
                 const hasUploadedFiles = projectFiles.length > 0;
                 const hasPastedHTML = htmlCodeArea.value.trim().length > 0;
 
@@ -501,9 +583,26 @@
                 log('🚀 Bắt đầu tạo IPA …', 'step');
 
                 try {
-                    const name = appName.value.trim() || 'MyWebApp';
-                    const bundle = bundleId.value.trim() || 'com.example.mywebapp';
-                    const version = appVersion.value.trim() || '1.0.0';
+                    let rawName = appName.value.trim() || 'MyWebApp';
+                    let rawBundle = bundleId.value.trim() || 'com.example.mywebapp';
+                    let rawVersion = appVersion.value.trim() || '1.0.0';
+
+                    // Sanitize
+                    log('🔧 Đang làm sạch tên file và Bundle ID …', 'step');
+                    const cleanName = sanitizeName(rawName);
+                    const cleanBundle = sanitizeBundleId(rawBundle);
+                    const cleanVersion = rawVersion.replace(/[^0-9.]/g, '') || '1.0.0';
+
+                    if (cleanName !== rawName) {
+                        log(`📛 Tên đã được chuẩn hóa: "${rawName}" → "${cleanName}"`, 'warn');
+                    }
+                    if (cleanBundle !== rawBundle) {
+                        log(`📛 Bundle ID đã được chuẩn hóa: "${rawBundle}" → "${cleanBundle}"`, 'warn');
+                    }
+
+                    const name = cleanName || 'MyWebApp';
+                    const bundle = cleanBundle || 'com.example.mywebapp';
+                    const version = cleanVersion;
 
                     log('📁 Đang đóng gói dự án …', 'step');
                     await sleep(150);
@@ -511,47 +610,47 @@
                     const zip = new JSZip();
                     const appFolder = `Payload/${name}.app`;
 
-                    // 1. Info.plist
+                    // 1. Valid Info.plist
+                    log('📄 Đang tạo Info.plist chuẩn …', 'step');
                     const infoPlist = `<?xml version="1.0" encoding="UTF-8"?>
                 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
                 <plist version="1.0">
                 <dict>
-                    <key>CFBundleName</key><string>${name}</string>
-                    <key>CFBundleIdentifier</key><string>${bundle}</string>
-                    <key>CFBundleVersion</key><string>${version}</string>
-                    <key>CFBundleShortVersionString</key><string>${version}</string>
+                    <key>CFBundleDevelopmentRegion</key><string>en</string>
+                    <key>CFBundleDisplayName</key><string>${name}</string>
                     <key>CFBundleExecutable</key><string>${name}</string>
+                    <key>CFBundleIdentifier</key><string>${bundle}</string>
+                    <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
+                    <key>CFBundleName</key><string>${name}</string>
                     <key>CFBundlePackageType</key><string>APPL</string>
+                    <key>CFBundleShortVersionString</key><string>${version}</string>
                     <key>CFBundleSupportedPlatforms</key><array><string>iPhoneOS</string></array>
-                    <key>MinimumOSVersion</key><string>11.0</string>
+                    <key>CFBundleVersion</key><string>${version}</string>
+                    <key>MinimumOSVersion</key><string>14.0</string>
                     <key>UIDeviceFamily</key><array><integer>1</integer><integer>2</integer></array>
                     <key>UIRequiresFullScreen</key><true/>
                     <key>UIStatusBarStyle</key><string>UIStatusBarStyleDefault</string>
-                    <key>UILaunchStoryboardName</key><string>LaunchScreen</string>
                 </dict>
                 </plist>`;
                     zip.file(`${appFolder}/Info.plist`, infoPlist);
 
-                    // 2. Add icon if provided
+                    // 2. Icon
                     if (iconData) {
-                        zip.file(`${appFolder}/icon.png`, iconData);
+                        zip.file(`${appFolder}/AppIcon.png`, iconData);
                     } else {
-                        // tiny dummy icon (1x1 transparent)
-                        zip.file(`${appFolder}/icon.png`, 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', { base64: true });
+                        // 1x1 transparent pixel
+                        zip.file(`${appFolder}/AppIcon.png`, 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', { base64: true });
                     }
 
-                    // 3. Add project files
+                    // 3. Add files
                     let hasIndex = false;
 
-                    // Check if we should use pasted HTML
                     if (htmlCodeArea.value.trim()) {
-                        // Use pasted HTML as index.html
                         const htmlContent = htmlCodeArea.value.trim();
                         zip.file(`${appFolder}/index.html`, htmlContent);
                         hasIndex = true;
                         log('📝 Đã nhúng mã HTML đã dán làm index.html', 'info');
 
-                        // If there are also uploaded files, add them too (as assets)
                         if (projectFiles.length > 0) {
                             for (const file of projectFiles) {
                                 let content = file.content;
@@ -561,14 +660,14 @@
                                 }
                                 let relativePath = file.path;
                                 if (relativePath.startsWith('./')) relativePath = relativePath.slice(2);
-                                // Skip if it's index.html from upload (prefer pasted one)
                                 if (file.name.toLowerCase() === 'index.html') continue;
-                                zip.file(`${appFolder}/assets/${relativePath}`, content);
+                                // Sanitize path
+                                const sanitizedPath = relativePath.replace(/[^a-zA-Z0-9_.\-/]/g, '_');
+                                zip.file(`${appFolder}/${sanitizedPath}`, content);
                             }
-                            log(`📦 Đã thêm ${projectFiles.length} file tải lên vào thư mục assets`, 'info');
+                            log(`📦 Đã thêm ${projectFiles.length} file tải lên vào .app bundle`, 'info');
                         }
                     } else if (projectFiles.length > 0) {
-                        // Use uploaded files
                         for (const file of projectFiles) {
                             let content = file.content;
                             if (content instanceof File) {
@@ -577,34 +676,40 @@
                             }
                             let relativePath = file.path;
                             if (relativePath.startsWith('./')) relativePath = relativePath.slice(2);
+                            // Sanitize path
+                            const sanitizedPath = relativePath.replace(/[^a-zA-Z0-9_.\-/]/g, '_');
                             if (file.name.toLowerCase() === 'index.html') {
                                 hasIndex = true;
                                 zip.file(`${appFolder}/index.html`, content);
                             } else {
-                                zip.file(`${appFolder}/assets/${relativePath}`, content);
+                                zip.file(`${appFolder}/${sanitizedPath}`, content);
                             }
                         }
                     }
 
-                    // if no index.html, create default
                     if (!hasIndex) {
                         zip.file(`${appFolder}/index.html`,
                             `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${name}</title></head><body style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:system-ui;background:#f0f4ff;color:#1e293b;"><div style="text-align:center;padding:2rem;"><h1>${name}</h1><p style="color:#475569;">Không tìm thấy index.html</p></div></body></html>`
                         );
                     }
 
-                    // 4. dummy executable
+                    // 4. Dummy executable (required for ldid)
                     zip.file(`${appFolder}/${name}`, '#!/bin/bash\necho "dummy"', { unixPermissions: 0o755 });
 
-                    log('📄 Đã tạo Info.plist và cấu trúc thư mục', 'step');
+                    log('📦 Đang đóng gói Payload …', 'step');
                     await sleep(150);
 
                     // Generate IPA
-                    log('📦 Nén file IPA …', 'step');
-                    const ipaBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
+                    log('📦 Đang nén file IPA …', 'step');
+                    const ipaBlob = await zip.generateAsync({
+                        type: 'blob',
+                        compression: 'DEFLATE',
+                        compressionOptions: { level: 6 }
+                    });
                     generatedIPA = ipaBlob;
                     fileSize.textContent = (ipaBlob.size / 1024).toFixed(1) + ' KB';
-                    log(`✅ IPA tạo thành công (${(ipaBlob.size / 1024).toFixed(1)} KB)`, 'step');
+                    log(`✅ IPA tạo thành công! (${(ipaBlob.size / 1024).toFixed(1)} KB)`, 'step');
+                    log('🎉 Hoàn tất!', 'step');
 
                     downloadBtn.disabled = false;
                     stepStatus.textContent = '✅ Hoàn tất';
@@ -622,13 +727,13 @@
             downloadBtn.addEventListener('click', () => {
                 if (!generatedIPA) return;
                 const name = appName.value.trim() || 'MyWebApp';
-                saveAs(generatedIPA, `${name}.ipa`);
-                log(`⬇️ Đang tải ${name}.ipa`, 'info');
+                const cleanName = sanitizeName(name);
+                saveAs(generatedIPA, `${cleanName}.ipa`);
+                log(`⬇️ Đang tải ${cleanName}.ipa`, 'info');
             });
 
             function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-            // initial log
             log('📱 IPA Forge sẵn sàng — tải lên dự án hoặc dán HTML để tạo IPA cho TrollStore.', 'info');
 
         })();
